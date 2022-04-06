@@ -3,6 +3,9 @@
     <meta charset="UTF-8"/>
 </head>
 <body>
-    template.html中的数据是: {{.}}
+传入的数据为：{{.}}
+以下为template包含的数据
+<!--注意，这边模板后要加上"." ,代表传入-->
+{{template "if.html" .}}
 </body>
 </html>
