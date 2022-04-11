@@ -10,7 +10,6 @@ func main() {
 	mux := http.NewServeMux()
 	mux.Handle("/", &myHandler{})
 	mux.HandleFunc("/bye", sayBye)
-
 	server := &http.Server{
 		Addr:         ":1210",
 		WriteTimeout: time.Second * 3, //设置3秒的写超时

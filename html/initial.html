@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--head是给浏览器的展示信息，即标签页名称-->
+<head>
+    <meta charset="UTF-8">
+    <title>MyInitialHtml</title>
+</head>
+<body>
+    Study Html
+    <!--总共6级标题-->
+    <h1>标题1</h1>
+    <h2>标题2</h2>
+    <h3>标题3</h3>
+    <h4>标题4</h4>
+    <h5>标题5</h5>
+    <h6>标题6</h6>
+    <!--    a 标签表示超链接,href代表超链接地址 target="_blank"表示新页面打开-->
+    <!--如果引用本地,那么就要基于项目目录的绝对路径,或者基于本文件的相对路径-->
+    <a href="https://www.baidu.com" target="_blank">百度</a>
+    <!--图片-->
+    <!--如果加载本地图片,那么就要写基于项目的绝对路径,例: src="/webapp/picture/xxx.jpg"-->
+    <img src="https://th.bing.com/th/id/OIP.B6pZ8N_dG3MNAYppM-zX0AHaEo?pid=ImgDet&rs=1">
+
+    有序列表 order list
+    <ol>
+        <li>吃</li>
+        <li>喝</li>
+        <li>拉</li>
+        <li>撒</li>
+    </ol>
+    无序列表
+    <ul>
+        <li>吃</li>
+        <li>喝</li>
+        <li>嫖</li>
+        <li>赌</li>
+    </ul>
+    自定义表单
+    <dl>
+        <dt>siri01</dt>
+        <dd>美男子</dd>
+        <dt>siri02</dt>
+        <dd>美男子</dd>
+        <td>lsl01</td>
+        <dd>美女</dd>
+        <td>lsl02</td>
+        <dd>美女</dd>
+    </dl>
+    表格
+    <table>
+        <!--thead: table head 表格头-->
+        <thead>
+<!--        tr: table row表格的一行-->
+            <tr>
+<!--             th: 表格的每一列-->
+                <th>学号</th>
+                <th>姓名</th>
+                <th>性别</th>
+            </tr>
+        </thead>
+<!--     tbody: table body 表格内容-->
+        <tbody>
+            <tr>
+                <td>01</td>
+                <td>siri</td>
+                <td>男</td>
+            </tr>
+            <tr>
+                <td>02</td>
+                <td>lsl</td>
+                <td>女</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>共有xxx人</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    表单
+    <form action="/register" method="POST">
+<!--        输入-->
+        <label>登录名称</label><input type="text" name="username" value="siri"/>
+        <label>密码</label><input type="password" name="password" value=""/>
+<!--        单选-->
+        <label>性别</label><input type="radio"  name="sex" value="0" checked="checked"/> <label>女</label>
+                            <input type="radio" name="sex" value="1"/> <label>男</label>
+<!--        多选-->
+        <label>爱好</label><input type="checkbox"  name="hobby" value="football" /> <label>足球</label>
+        <input type="checkbox"  name="hobby" value="basketball" /> <label>篮球</label>
+        <input type="checkbox"  name="hobby" value="tennis" /> <label>网球</label>
+<!--        单选下拉框-->
+        <label>部门</label><select name="department">
+           <option value="developer">开发</option>
+          <option value="devops">devops</option>
+            <!--       selected="selected" 下拉框的默认选项 -->
+          <option value="tester" selected="selected">测试</option>
+       </select>
+<!--        多选下拉框-->
+        <label>服务器</label><select name="server" multiple="multiple">
+        <option value="127.0.0.1">127.0.0.1</option>
+        <option value="127.0.0.2">127.0.0.2</option>
+        <!--       selected="selected" 下拉框的默认选项 -->
+        <option value="127.0.0.3" selected="selected">127.0.0.3</option>
+    </select>
+<!--        提交按钮-->
+        <button>submit</button>
+<!--        备注-->
+        <label>备注:</label><textarea name="remark">hello,我是xxx</textarea>
+    </form>
+
+    <div>我的第一个div</div>
+    <div>我的第二个div</div>
+    <span>我的第一个span</span>
+    <span>我的第二个span</span>
+</body>
+</html>
