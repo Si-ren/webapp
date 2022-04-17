@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{{.name}}
+{{if .body}}
+男
+{{else}}
+女
+{{end}}
+
+{{range .scores}}
+{{.}}
+{{end}}
+
+{{range $index,$value := .users}}
+{{$index}} = {{$value}}
+{{end}}
+{{lower .content}}
+</body>
+</html>

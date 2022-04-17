@@ -1,0 +1,22 @@
+<!--定义模板-->
+{{define "define1"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+model1 传入的参数: {{.}}
+<!--在define中也可以使用模板-->
+{{template "testBlock" .}}
+
+
+</body>
+</html>
+{{end}}
+
+<!--如果找不到定义,那么就会使用block中的-->
+{{block "testBlock" .}}
+如果找不到就显示
+{{end}}

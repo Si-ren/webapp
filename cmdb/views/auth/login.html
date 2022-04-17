@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{config "String" "AppName" "CMDB"}}</title>
+</head>
+<body>
+    <form action="{{urlfor `AuthController.Login`}}" method="post">
+        <label>用户名:</label><input type="text" name="name" value="{{.form.Name}}"/><br>
+        <label>密码:</label><input type="password" name="password" value=""/><br>
+        {{ if .error.HasErrors  }}
+            {{ range .error.Errors}}
+                {{index .  0}}
+            {{end}}
+            <br>
+        {{end}}
+        <button>登录</button>
+    </form>
+</body>
+</html>
