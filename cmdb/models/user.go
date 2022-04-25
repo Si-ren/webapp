@@ -1,41 +1,115 @@
 package models
 
 import (
+	"cmdb/utils"
+	"database/sql"
 	"fmt"
-	"webapp/cmdb/utils"
+	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
-// User用户对象
+// User 用户对象
 type User struct {
-	ID         int
-	StaffID    string
-	Name       string
-	NickName   string
-	Password   string
-	Gender     int
-	Tel        string
-	Addr       string
-	Email      string
-	Department string
-	status     int
+	gorm.Model `gorm:"gorm.Model"`
+	//ID         int    `gorm:"index:idx_id;not null;autoIncrement"`
+	//string 类型 从gorm创建到数据库是varchar类型,可以写为 type:varcahr(32)
+	StaffID    string `gorm:"size:32"`
+	Name       string `gorm:"size:16"`
+	NickName   string `gorm:"size:16"`
+	Password   string `gorm:"size:128"`
+	Gender     int    `gorm:"type:tinyint"`
+	Tel        string `gorm:"size:16"`
+	Addr       string `gorm:"size:64"`
+	Email      string `gorm:"size:64"`
+	Department string `gorm:"size:16"`
+	//int无法设置size
+	Status int `gorm:"status"`
 }
 
 const (
 	sqlQueryByName = "select id,name,password from user where name=?"
+	sqlQuery       = "select gender, name,department from users"
 )
 
 //
-func GetUserByName(str string) *User {
-	fmt.Println(str)
+func GetUserByName(name string) (*User, error) {
+	fmt.Println(name)
 	user := &User{}
-	if err := DB.QueryRow(sqlQueryByName, str).Scan(&user.ID, &user.Name, &user.Password); err == nil {
-		fmt.Println(user)
-		return user
+	//user1 := &User{}
+	//DB.Raw("SELECT * FROM `users` WHERE name='siri'").Scan(user1)
+	//fmt.Println(user1)
+	err := DB.Table("users").Where("name = ?", name).First(user).Error
+	if err == nil {
+		fmt.Println("Get user: ", user, err)
+		return user, err
 	}
-	return nil
+	fmt.Println("Can't get user: ", user, err)
+	return nil, err
 }
 
 func (u *User) ValidPassword(password string) bool {
 	fmt.Println(password, u.Password)
-	return u.Password == utils.Md5Text(password)
+	//fmt.Println(u.Password == utils.Md5Text(password))
+	if bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password)) != nil {
+		return false
+	}
+	return true
+	//return u.Password == password
+}
+
+func CreateUser(user *User) (bool, error) {
+	user.Password = utils.Md5Text(user.Password)
+	err := DB.Create(user).Error
+	if err != nil {
+		return false, err
+	}
+	return true, err
+}
+
+func QueryUser(query string) ([]*User, error) {
+	users := make([]*User, 0)
+	var rows *sql.Rows
+	if query == "" {
+		//https://gorm.io/docs/sql_builder.html#Row-amp-Rows
+		rows, err = DB.Raw(sqlQuery).Rows()
+		if err != nil {
+			fmt.Println(err)
+			return nil, err
+		}
+	} else {
+		query = utils.Like(query)
+		fmt.Println(query)
+		SQL := sqlQuery + " where gender like ? ESCAPE '/' or  name like  ? ESCAPE '/' or department like ? ESCAPE '/'"
+		rows, err = DB.Raw(SQL, query, query, query).Rows()
+	}
+	defer rows.Close()
+	for rows.Next() {
+		user := &User{}
+		if err := rows.Scan(&user.Gender, &user.Name, &user.Department); err == nil {
+			users = append(users, user)
+		}
+	}
+	fmt.Println("User QueryUser :", users)
+	return users, err
+}
+
+// GenderText  性别显示
+func (u *User) GenderText() string {
+	if u.Gender == 0 {
+		return "女"
+	}
+	return "男"
+}
+
+//StatusText 状态显示
+func (u *User) StatusText() string {
+	switch u.Status {
+	case 0:
+		return "正常"
+	case 1:
+		return "锁定"
+	case 2:
+		return "离职"
+	}
+	return "Error Status"
 }

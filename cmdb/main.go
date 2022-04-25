@@ -1,9 +1,9 @@
 package main
 
 import (
+	_ "cmdb/models"
+	_ "cmdb/routers"
 	"github.com/astaxie/beego"
-	_ "webapp/cmdb/models"
-	_ "webapp/cmdb/routers"
 )
 
 func main() {

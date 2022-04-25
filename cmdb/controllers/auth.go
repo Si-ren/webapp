@@ -1,12 +1,13 @@
 package controllers
 
 import (
+	"cmdb/base/error"
+	"cmdb/forms"
+	"cmdb/models"
+	"cmdb/utils"
 	"fmt"
 	"github.com/astaxie/beego"
 	"net/http"
-	"webapp/cmdb/base/error"
-	"webapp/cmdb/forms"
-	"webapp/cmdb/models"
 )
 
 type AuthController struct {
@@ -19,23 +20,57 @@ func (c *AuthController) Login() {
 	if c.Ctx.Input.IsPost() {
 		form.Name = c.Ctx.Input.Query("name")
 		form.Password = c.Ctx.Input.Query("password")
-		fmt.Println(form)
-		user := models.GetUserByName(form.Name)
-		fmt.Println(user)
+		fmt.Println("Get Form:", form)
+		user, err := models.GetUserByName(form.Name)
+		if err != nil {
+			fmt.Println(err)
+		}
 		if user == nil {
 			//用户不存在
 			error.AddError("default", "用户名或密码不正确")
 		} else if user.ValidPassword(form.Password) {
 			//用户密码正确
-			c.Redirect("/home/index", http.StatusFound)
-
+			c.Redirect(beego.URLFor("UserController.GetUser"), http.StatusFound)
+			//c.Redirect("/user/getuser", http.StatusFound)
 		} else {
 			//用户密码不正确
 			error.AddError("default", "用户名或密码不正确")
 		}
 	}
+
 	fmt.Println(error)
 	c.Data["form"] = form
 	c.Data["error"] = error
 	c.TplName = "auth/login.html"
+}
+
+func (c *AuthController) Register() {
+	error := error.New()
+	user := models.User{
+		StaffID:    "",
+		Name:       c.GetString("name"),
+		NickName:   c.GetString("nickname"),
+		Password:   c.GetString("password"),
+		Tel:        c.GetString("telephone"),
+		Addr:       c.GetString("address"),
+		Email:      c.GetString("email"),
+		Department: c.GetString("department"),
+	}
+	user.Gender, _ = c.GetInt("gender")
+	fmt.Println(user)
+	if c.Ctx.Input.IsPost() {
+		users, err := models.GetUserByName(user.Name)
+		fmt.Println(err)
+		fmt.Println(users)
+		if err == nil {
+			fmt.Println("用户名已经存在")
+			error.AddError("Register error: ", "用户名已存在")
+		} else {
+			user.Password = utils.GeneratePassword(user.Password)
+			models.CreateUser(&user)
+		}
+	}
+	fmt.Println(error)
+	c.Data["error"] = error
+	c.TplName = "auth/register.html"
 }

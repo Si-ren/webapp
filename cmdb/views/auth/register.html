@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form action="{{urlfor `AuthController.Register`}}" method="post">
+    <label>用户名:</label><input type="text" name="name" value="{{.form.Name}}"/><br>
+        <label>密码:</label><input type="password" name="password" value=""/><br>
+        <label>手机号:</label><input type="text" name="password" value=""/><br>
+        <label>地址:</label><input type="text" name="password" value=""/><br>
+        <label>Email:</label><input type="text" name="password" value=""/><br>
+        <label>部门:</label><select name="department" />
+        <option value="developer">开发</option>
+        <option value="devops">devops</option>
+        <!--       selected="selected" 下拉框的默认选项 -->
+        <option value="tester" selected="selected">测试</option>
+        </select>
+    {{ if .error.HasErrors  }}
+        {{ range .error.Errors}}
+    {{index .  0}}
+        {{end}}
+    <br>
+    {{end}}
+    <button>注册</button>
+</form>
+</body>
+</html>
