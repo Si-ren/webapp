@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Box盒子模型</title>
+    <style>
+    /*填充*/
+        div.first {
+            background-color: yellow;
+            width: 100px;
+            height: 100px;
+            padding: 10px;
+        }
+    /*增加了border */
+        div.second {
+            background-color: green;
+            width: 100px;
+            height: 100px;
+            padding: 10px;
+            border: 3px solid blue ;
+        }
+         div.third {
+            background-color: darkseagreen;
+             width: 100px;
+             height: 100px;
+             /*可以写成padding: 上 右 下 左
+             即: padding 10px 20px 30px 40px*/
+             padding-top: 10px;
+             padding-right: 20px;
+             padding-bottom: 30px;
+             padding-left: 40px;
+             border: 3px solid blue ;
+        }
+    </style>
+</head>
+<body>
+    <div class="first">aaaaaaaaaaa</div>
+    <div class="second">bbbbbbbbb</div>
+    <div class="third">ccccccccc</div>
+
+</body>
+</html>

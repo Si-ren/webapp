@@ -4,7 +4,6 @@ import (
 	"cmdb/base/error"
 	"cmdb/forms"
 	"cmdb/models"
-	"cmdb/utils"
 	"fmt"
 	"github.com/astaxie/beego"
 	"net/http"
@@ -15,6 +14,10 @@ type AuthController struct {
 }
 
 func (c *AuthController) Login() {
+	if c.GetSession("user") != nil {
+		c.Redirect(beego.URLFor("UserController.Query"), http.StatusFound)
+		return
+	}
 	form := &forms.LoginForm{}
 	error := error.New()
 	if c.Ctx.Input.IsPost() {
@@ -27,9 +30,12 @@ func (c *AuthController) Login() {
 		}
 		if user == nil {
 			//用户不存在
-			error.AddError("default", "用户名或密码不正确")
+			error.AddError("default", "用户不存在")
 		} else if user.ValidPassword(form.Password) {
 			//用户密码正确
+			//记录用户状态(session,记录服务器)
+
+			c.SetSession("user", user.ID)
 			c.Redirect(beego.URLFor("UserController.GetUser"), http.StatusFound)
 			//c.Redirect("/user/getuser", http.StatusFound)
 		} else {
@@ -66,11 +72,17 @@ func (c *AuthController) Register() {
 			fmt.Println("用户名已经存在")
 			error.AddError("Register error: ", "用户名已存在")
 		} else {
-			user.Password = utils.GeneratePassword(user.Password)
+
+			fmt.Println("")
 			models.CreateUser(&user)
 		}
 	}
 	fmt.Println(error)
 	c.Data["error"] = error
 	c.TplName = "auth/register.html"
+}
+
+func (c *AuthController) Logout() {
+	c.DestroySession()
+	c.Redirect(beego.URLFor("AuthController.Login"), http.StatusFound)
 }

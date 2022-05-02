@@ -3,18 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <title>{{config "String" "AppName" "CMDB"}}</title>
+<!--    css type默认为text/css,不使用空字符串或文本/css以外的值,所以极少理由需要包含type-->
+    <link rel="stylesheet" href="/cmdb/static/component/bootstrap-4.3.1/css/bootstrap.min.css">
+    {{ assert_css "/cmdb/static/component/bootstrap-4.3.1/css/bootstrap.min.css" }}
+    <style type="text/css">
+    /* 选择器
+     应用到所有div标签: 标签选择器 tag
+     应用到某个ID标签: ID选择器 #id
+     应用到某个class标签: class选择器  .class
+     */
+        div {
+        color:red;
+        }
+    </style>
 </head>
 <body>
     <form action="{{urlfor `AuthController.Login`}}" method="post">
         <label>用户名:</label><input type="text" name="name" value="{{.form.Name}}"/><br>
         <label>密码:</label><input type="password" name="password" value=""/><br>
         {{ if .error.HasErrors  }}
+<!--        css 内联的方式展示内容-->
+        <div>
             {{ range .error.Errors}}
                 {{index .  0}}
             {{end}}
             <br>
+        </div>
         {{end}}
-        <button>登录</button>
+        <div class="form-group">    
+            <button>登录</button>
+        </div>
     </form>
 </body>
 </html>

@@ -1,0 +1,39 @@
+<style>
+    /*隐藏*/
+div.A{
+    display: none;
+}
+/*设置在box中居中对其*/
+div.B {
+    background-color: yellow;
+    color: green;
+    width: 100px;
+    height: 100px;
+    padding: 10px ;
+    border: 25px solid red;
+    text-align: center;
+    /*边框变成圆角*/
+    border-radius: 50px;
+}
+div.C{
+    float: right;
+    background-color: aqua;
+    width: 100px;
+    height: 40px;
+}
+span.SC {
+    float:  right;
+}
+/*列表的样式*/
+ul{
+    list-style-type: lower-alpha;
+}
+table {
+    width: 100%;
+}
+table td,th{
+    border: 1px;
+    border-style: solid;
+    border-color: green;
+}
+</style>

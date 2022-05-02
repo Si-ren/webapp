@@ -1,29 +1,29 @@
 package models
 
 import (
-	"cmdb/utils"
-	"database/sql"
 	"fmt"
+	"github.com/astaxie/beego/orm"
 	"golang.org/x/crypto/bcrypt"
-	"gorm.io/gorm"
+	"time"
 )
 
 // User 用户对象
 type User struct {
-	gorm.Model `gorm:"gorm.Model"`
-	//ID         int    `gorm:"index:idx_id;not null;autoIncrement"`
-	//string 类型 从gorm创建到数据库是varchar类型,可以写为 type:varcahr(32)
-	StaffID    string `gorm:"size:32"`
-	Name       string `gorm:"size:16"`
-	NickName   string `gorm:"size:16"`
-	Password   string `gorm:"size:128"`
-	Gender     int    `gorm:"type:tinyint"`
-	Tel        string `gorm:"size:16"`
-	Addr       string `gorm:"size:64"`
-	Email      string `gorm:"size:64"`
-	Department string `gorm:"size:16"`
+	ID         int    `orm:"column(id)"`
+	StaffID    string `orm:"size(32)"`
+	Name       string `orm:"size(32)"`
+	NickName   string `orm:"size(32)"`
+	Password   string `orm:"size(1024)"`
+	Gender     int    `orm:"type(tinyint)"`
+	Tel        string `orm:"size(16)"`
+	Addr       string `orm:"size(128)"`
+	Email      string `orm:"size(128)"`
+	Department string `orm:"size(32)"`
 	//int无法设置size
-	Status int `gorm:"status"`
+	Status   int       `orm:""`
+	CreateAt time.Time `orm:"auto_now_add"`
+	UpdateAt time.Time `orm:"auto_now"`
+	DeleteAt time.Time `orm:"null "`
 }
 
 const (
@@ -35,22 +35,21 @@ const (
 func GetUserByName(name string) (*User, error) {
 	fmt.Println(name)
 	user := &User{}
-	//user1 := &User{}
-	//DB.Raw("SELECT * FROM `users` WHERE name='siri'").Scan(user1)
-	//fmt.Println(user1)
-	err := DB.Table("users").Where("name = ?", name).First(user).Error
-	if err == nil {
-		fmt.Println("Get user: ", user, err)
+	user.Name = name
+
+	if err := mysql.Read(user, "name"); err != nil {
+		return nil, err
+	} else {
 		return user, err
 	}
-	fmt.Println("Can't get user: ", user, err)
-	return nil, err
 }
 
 func (u *User) ValidPassword(password string) bool {
 	fmt.Println(password, u.Password)
 	//fmt.Println(u.Password == utils.Md5Text(password))
-	if bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password)) != nil {
+
+	if err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password)); err != nil {
+		fmt.Println("ValidPassword bcrypt.CompareHashAndPassword :", err)
 		return false
 	}
 	return true
@@ -58,8 +57,17 @@ func (u *User) ValidPassword(password string) bool {
 }
 
 func CreateUser(user *User) (bool, error) {
-	user.Password = utils.Md5Text(user.Password)
-	err := DB.Create(user).Error
+	//user.Password = utils.Md5Text(user.Password)
+	fmt.Println(user.Password)
+	password, err := bcrypt.GenerateFromPassword([]byte(user.Password), 0)
+	if err != nil {
+		return false, err
+	}
+
+	user.Password = string(password)
+	fmt.Println(user.Password)
+
+	_, err = mysql.Insert(user)
 	if err != nil {
 		return false, err
 	}
@@ -67,29 +75,22 @@ func CreateUser(user *User) (bool, error) {
 }
 
 func QueryUser(query string) ([]*User, error) {
-	users := make([]*User, 0)
-	var rows *sql.Rows
-	if query == "" {
-		//https://gorm.io/docs/sql_builder.html#Row-amp-Rows
-		rows, err = DB.Raw(sqlQuery).Rows()
-		if err != nil {
-			fmt.Println(err)
-			return nil, err
-		}
-	} else {
-		query = utils.Like(query)
-		fmt.Println(query)
-		SQL := sqlQuery + " where gender like ? ESCAPE '/' or  name like  ? ESCAPE '/' or department like ? ESCAPE '/'"
-		rows, err = DB.Raw(SQL, query, query, query).Rows()
+	var users []*User
+	querySet := mysql.QueryTable(&User{})
+
+	if query != "" {
+		cond := orm.NewCondition()
+		cond = cond.Or("name__icontains", query)
+		cond = cond.Or("nickname__icontains", query)
+		cond = cond.Or("tel__icontains", query)
+		cond = cond.Or("addr__icontains", query)
+		cond = cond.Or("email__icontains", query)
+		cond = cond.Or("status__icontains", query)
+		querySet = querySet.SetCond(cond)
+
 	}
-	defer rows.Close()
-	for rows.Next() {
-		user := &User{}
-		if err := rows.Scan(&user.Gender, &user.Name, &user.Department); err == nil {
-			users = append(users, user)
-		}
-	}
-	fmt.Println("User QueryUser :", users)
+	rows, err := querySet.All(&users)
+	fmt.Println("QueryUser :", rows, err)
 	return users, err
 }
 

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CSS选择器</title>
+    <style>
+        /*标签选择器
+        */
+        /*important设置优先级为最优*/
+        div{
+            color: red!important;
+        }
+        /*id选择器
+        */
+        #div2 {
+            color: green;
+        }
+    /*    class选择器*/
+        div.green{
+            color:blue;
+        }
+    /*  符合选择器,即多个选择器一起使用
+    div.green
+    子孙选择器: selector selector
+    子选择器: selector>selector
+    属性选择器 [] [key=value] [key!=value] [key~=value] ~=表示以value开头的
+    */
+    /* 属性选择器*/
+    [green]{
+        color: green;
+    }
+    </style>
+</head>
+<body>
+<div>DIV1</div>
+<div id="div2">DIV2</div>
+<div class="green">DIV3</div>
+<span id="div2">span1</span>
+<span class="green">span2</span>
+<span green>span3</span>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Form</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row" >
+        <div class="col-4 offset-4">
+            <form action="">
+                <h1>用户登录</h1>
+                <div class="form-group row ">
+                    <div class="col-2 col-form-label">
+                        <label>姓名</label>
+                    </div>
+                    <div class="col-8">
+                        <input type="text" class="form-control form-control-sm" name="name" value="" >
+                        <small class="form-text  text-muted">姓名只能包含大小写英文字母</small>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-2  col-form-label">密码</label>
+                    <div class="col-8">
+                        <input type="password" class="form-control form-control-lg" password="password" value="" >
+                    </div>
+                </div>
+                <div class="form-group row ">
+                    <label class="col-2 col-form-label">性别</label>
+                    <div class="col-10">
+                        <div class="form-check form-check-inline">
+                            <input type="radio"  class="form-check-input" name="gender" value="1" >
+                            <label>男</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" class="form-check-input" name="gender" value="0" >
+                            <label>女</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-8 offset-2">
+                        <input type="submit" class="btn btn-primary btn-block" value="登录" >
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-2 col-form-label">部门</label>
+                    <div class="col-8">
+                        <select class="form-control">
+                            <option>开发</option>
+                            <option>运维</option>
+                            <option>测试</option>
+                            <option>产品</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-2 col-form-label">备注</label>
+                    <div class="col-8">
+                        <textarea class="form-control"></textarea>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="offset-2 col-8">
+                        <input type="submit" class="btn btn-primary btn-block" value="提交">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<form>
+    <input type= "hidden" name="h" value="h"/>
+    <input type= "text" name= "r"  value= "r" readonly="readonly"/>
+    <input type="text" name= "d" value="d" disabled="disabled" />
+    <input type="submit" value="提交"/>
+</form>
+
+</body>
+</html>
