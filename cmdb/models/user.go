@@ -114,3 +114,11 @@ func (u *User) StatusText() string {
 	}
 	return "Error Status"
 }
+
+func GetUserByID(ID int) *User {
+	user := &User{ID: ID}
+	if err := mysql.Read(user); err == nil {
+		return user
+	}
+	return nil
+}

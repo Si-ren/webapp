@@ -4,35 +4,82 @@
     <meta charset="UTF-8">
     <title>{{config "String" "AppName" "CMDB"}}</title>
 <!--    css type默认为text/css,不使用空字符串或文本/css以外的值,所以极少理由需要包含type-->
-    <link rel="stylesheet" href="/cmdb/static/component/bootstrap-4.3.1/css/bootstrap.min.css">
-    {{ assert_css "/cmdb/static/component/bootstrap-4.3.1/css/bootstrap.min.css" }}
+    <link rel="stylesheet" href="/static/component/bootstrap-4.3.1/css/bootstrap.min.css">
+<!--    这是beego的函数-->
+    {{ assets_css "/static/component/bootstrap-4.3.1/css/bootstrap.min.css" }}
     <style type="text/css">
     /* 选择器
      应用到所有div标签: 标签选择器 tag
      应用到某个ID标签: ID选择器 #id
      应用到某个class标签: class选择器  .class
      */
-        div {
-        color:red;
-        }
+        /*div {*/
+        /*color:red;*/
+        /*}*/
+    div.login {
+        margin-top: 250px;
+    }
+    body{
+        /*background-image: url("/static/images/test.jpg");*/
+        background-color: antiquewhite;
+    }
     </style>
 </head>
 <body>
-    <form action="{{urlfor `AuthController.Login`}}" method="post">
-        <label>用户名:</label><input type="text" name="name" value="{{.form.Name}}"/><br>
-        <label>密码:</label><input type="password" name="password" value=""/><br>
-        {{ if .error.HasErrors  }}
-<!--        css 内联的方式展示内容-->
-        <div>
-            {{ range .error.Errors}}
-                {{index .  0}}
-            {{end}}
-            <br>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-4 offset-4 ">
+                <div class="login shadow-lg rounded p-3 mb-5">
+                    <form class="" action="{{urlfor `AuthController.Login`}}" method="post">
+                        <h1 class="col-4 offset-4 ">用户登录</h1>
+                        <div class="form-group row">
+                            <label class="col-4  col-form-label">用户名:</label>
+                            <div  class="col-12">
+                                <input class="form-control " name="name" value="{{.form.Name}}"/><br>
+                            </div>
+                        </div>
+                        <div class="form-group9 row">
+                            <label class="col-4 col-form-label">密码:</label>
+                            <div class="col-12">
+                                <input  class="form-control" type="password" name="password" value=""/><br>
+                            </div>
+                        </div>
+                            {{ if .error.HasErrors  }}
+                    <!--        css 内联的方式展示内容-->
+                            <div>
+                                {{ range .error.Errors}}
+                                    <span class="text-danger">{{index .  0}}</span>
+                                {{end}}
+                                <br>
+                            </div>
+                            {{end}}
+                        <div class="form-group row">
+                            <div class="col-12">
+                                <input type="submit" class="btn btn-primary btn-block" value="登录" >
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        {{end}}
-        <div class="form-group">    
-            <button>登录</button>
-        </div>
-    </form>
+    </div>
+
+<!--原login界面-->
+<!--    <form action="{{urlfor `AuthController.Login`}}" method="post">-->
+<!--        <label>用户名:</label><input type="text" name="name" value="{{.form.Name}}"/><br>-->
+<!--        <label>密码:</label><input type="password" name="password" value=""/><br>-->
+<!--        {{ if .error.HasErrors  }}-->
+<!--&lt;!&ndash;        css 内联的方式展示内容&ndash;&gt;-->
+<!--        <div>-->
+<!--            {{ range .error.Errors}}-->
+<!--                {{index .  0}}-->
+<!--            {{end}}-->
+<!--            <br>-->
+<!--        </div>-->
+<!--        {{end}}-->
+<!--        <div class="form-group">    -->
+<!--            <button>登录</button>-->
+<!--        </div>-->
+<!--    </form>-->
 </body>
 </html>

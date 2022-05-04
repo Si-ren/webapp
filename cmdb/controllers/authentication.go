@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"cmdb/models"
 	"fmt"
 	"github.com/astaxie/beego"
 	"net/http"
@@ -11,9 +12,18 @@ type Authentication struct {
 }
 
 func (c *Authentication) Prepare() {
-	if c.GetSession("user") == nil {
-		fmt.Println("AuthContoller Prepare")
-		c.Redirect(beego.URLFor("AuthController.Login"), http.StatusFound)
-		c.StopRun()
+	sessionValue := c.GetSession("user")
+	if sessionValue != nil {
+		fmt.Println("")
+		if ID, ok := sessionValue.(int); ok {
+			if user := models.GetUserByID(ID); user != nil {
+				c.Data["loginUser"] = user
+				return
+			}
+		}
 	}
+
+	fmt.Println("AuthContoller Prepare")
+	c.Redirect(beego.URLFor("AuthController.Login"), http.StatusFound)
+	c.StopRun()
 }
