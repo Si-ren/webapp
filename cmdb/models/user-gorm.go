@@ -28,23 +28,23 @@ package models
 //}
 //
 //const (
-//	sqlQueryByName = "select id,name,password from user where name=?"
+//	sqlQueryByName = "select id,name,password from user.go where name=?"
 //	sqlQuery       = "select gender, name,department from users"
 //)
 //
 ////
 //func GetUserByName(name string) (*User, error) {
 //	fmt.Println(name)
-//	user := &User{}
+//	user.go := &User{}
 //	//user1 := &User{}
 //	//DB.Raw("SELECT * FROM `users` WHERE name='siri'").Scan(user1)
 //	//fmt.Println(user1)
-//	err := DB.Table("users").Where("name = ?", name).First(user).Error
+//	err := DB.Table("users").Where("name = ?", name).First(user.go).Error
 //	if err == nil {
-//		fmt.Println("Get user: ", user, err)
-//		return user, err
+//		fmt.Println("Get user.go: ", user.go, err)
+//		return user.go, err
 //	}
-//	fmt.Println("Can't get user: ", user, err)
+//	fmt.Println("Can't get user.go: ", user.go, err)
 //	return nil, err
 //}
 //
@@ -58,9 +58,9 @@ package models
 //	//return u.Password == password
 //}
 //
-//func CreateUser(user *User) (bool, error) {
-//	user.Password = utils.Md5Text(user.Password)
-//	err := DB.Create(user).Error
+//func CreateUser(user.go *User) (bool, error) {
+//	user.go.Password = utils.Md5Text(user.go.Password)
+//	err := DB.Create(user.go).Error
 //	if err != nil {
 //		return false, err
 //	}
@@ -85,9 +85,9 @@ package models
 //	}
 //	defer rows.Close()
 //	for rows.Next() {
-//		user := &User{}
-//		if err := rows.Scan(&user.Gender, &user.Name, &user.Department); err == nil {
-//			users = append(users, user)
+//		user.go := &User{}
+//		if err := rows.Scan(&user.go.Gender, &user.go.Name, &user.go.Department); err == nil {
+//			users = append(users, user.go)
 //		}
 //	}
 //	fmt.Println("User QueryUser :", users)

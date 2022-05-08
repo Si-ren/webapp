@@ -22,7 +22,8 @@ func (c *HomeController) Init(ctx *context.Context, controllerName, actionName s
 }
 
 //func (c *HomeController) Prepare() {
-//	fmt.Println("Prepare")
+//	c.Authentication.Prepare()
+//	c.Data["nav"] = "home"
 //}
 
 func (c *HomeController) Test() {

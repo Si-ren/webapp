@@ -38,6 +38,7 @@ func (c *AuthController) Login() {
 			c.SetSession("user", user.ID)
 			c.Redirect(beego.URLFor("UserController.GetUser"), http.StatusFound)
 			//c.Redirect("/user/getuser", http.StatusFound)
+
 		} else {
 			//用户密码不正确
 			error.AddError("default", "用户名或密码不正确")

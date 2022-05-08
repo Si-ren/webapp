@@ -1,6 +1,8 @@
 package models
 
 import (
+	"cmdb/forms"
+	"cmdb/utils"
 	"fmt"
 	"github.com/astaxie/beego/orm"
 	"golang.org/x/crypto/bcrypt"
@@ -27,7 +29,7 @@ type User struct {
 }
 
 const (
-	sqlQueryByName = "select id,name,password from user where name=?"
+	sqlQueryByName = "select id,name,password from user.go where name=?"
 	sqlQuery       = "select gender, name,department from users"
 )
 
@@ -57,7 +59,7 @@ func (u *User) ValidPassword(password string) bool {
 }
 
 func CreateUser(user *User) (bool, error) {
-	//user.Password = utils.Md5Text(user.Password)
+	//user.go.Password = utils.Md5Text(user.go.Password)
 	fmt.Println(user.Password)
 	password, err := bcrypt.GenerateFromPassword([]byte(user.Password), 0)
 	if err != nil {
@@ -121,4 +123,23 @@ func GetUserByID(ID int) *User {
 		return user
 	}
 	return nil
+}
+
+func ModifyUserByForm(form *forms.UserModifyForm) {
+	fmt.Println(form)
+	if user := GetUserByID(form.ID); user != nil {
+		user.Name = form.Name
+		user.Password = utils.GeneratePassword(form.Password)
+		fmt.Println(user.Password)
+		mysql.Update(user, "Name", "Password")
+	}
+}
+
+func DeleteUserByID(ID int) {
+	mysql.Delete(&User{ID: ID})
+}
+
+func ModifyUserPassword(user *User, password string) {
+	user.Password = utils.GeneratePassword(password)
+	mysql.Update(user, "Password")
 }

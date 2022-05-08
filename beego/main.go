@@ -19,7 +19,7 @@ func (c *TemplateController) Tpl() {
 	c.Data["users"] = map[int]string{1: "siri", 2: "lsl"}
 	c.Data["content"] = "abc.ABC"
 	//后缀只支持html和tpl
-	c.TplName = "template.html"
+	c.TplName = "templates.html"
 
 }
 func main() {

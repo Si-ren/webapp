@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>LOGIN</title>
+    {{ assets_css "/static/component/bootstrap-4.3.1/css/bootstrap.min.css" }}
+
 </head>
 <body>
+    {{ template "templates/navbar.html" . }}
     <form action="{{urlfor `LoginController.Index`}}" method="get">
     xxxxxxxxx
     </form>

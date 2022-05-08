@@ -29,7 +29,7 @@ func handler01(w http.ResponseWriter, r *http.Request) {
 	//fmt.Fprintln(w, "请求参数: ", r.Form)
 	//fmt.Fprintln(w, "POST请求的参数: ", r.PostForm)
 	fmt.Fprintln(w, "POST请求的参数的值: ", r.PostFormValue("username"))
-	fmt.Fprintln(w, "URL中的user请求参数值: ", r.FormValue("user"))
+	fmt.Fprintln(w, "URL中的user请求参数值: ", r.FormValue("user.go"))
 }
 
 //返回json

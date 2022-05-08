@@ -32,9 +32,9 @@ type Template struct {
 //创建处理器函数
 func testTemplateIf(w http.ResponseWriter, r *http.Request) {
 	////解析模板
-	//t, _ := template.ParseFiles("template.html")
+	//t, _ := templates.ParseFiles("templates.html")
 	////执行嵌入操作
-	//t.Execute(w, "hello template")
+	//t.Execute(w, "hello templates")
 
 	//使用must函数来对err进行处理, 如果err非nil, 那么must函数会产生panic
 	T := template.Must(template.ParseFiles("if.html"))
@@ -81,7 +81,7 @@ func testTemplateWith(w http.ResponseWriter, r *http.Request) {
 
 func testTemplateTemplate(w http.ResponseWriter, r *http.Request) {
 	//使用must函数来对err进行处理, 如果err非nil, 那么must函数会产生panic
-	T := template.Must(template.ParseFiles("template.html", "if.html"))
+	T := template.Must(template.ParseFiles("templates.html", "if.html"))
 
 	T.Execute(w, "Siri")
 }
@@ -107,8 +107,8 @@ func testTemplateFunc(w http.ResponseWriter, r *http.Request) {
 			return strings.ToUpper(text[:1]) + text[2:]
 		},
 	}
-	T := template.Must(template.New("tpl").Funcs(tplFunc).ParseFiles("template.html", "define1.html"))
-	err := T.ExecuteTemplate(w, "template.html", "abcdefg")
+	T := template.Must(template.New("tpl").Funcs(tplFunc).ParseFiles("templates.html", "define1.html"))
+	err := T.ExecuteTemplate(w, "templates.html", "abcdefg")
 	if err != nil {
 		fmt.Println(err.Error())
 	}
