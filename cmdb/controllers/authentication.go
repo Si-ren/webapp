@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"cmdb/models"
+	"cmdb/services"
 	"fmt"
 	"github.com/astaxie/beego"
 	"net/http"
@@ -20,7 +21,7 @@ func (c *Authentication) Prepare() {
 	if sessionValue != nil {
 		fmt.Println("")
 		if ID, ok := sessionValue.(int); ok {
-			if user := models.GetUserByID(ID); user != nil {
+			if user := services.UserService.GetByID(ID); user != nil {
 				c.LoginUser = user
 				c.Data["loginUser"] = user
 				return

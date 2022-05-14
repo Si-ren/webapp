@@ -4,6 +4,7 @@ import (
 	"cmdb/base/error"
 	"cmdb/forms"
 	"cmdb/models"
+	"cmdb/services"
 	"fmt"
 	"github.com/astaxie/beego"
 	"net/http"
@@ -14,6 +15,7 @@ type AuthController struct {
 }
 
 func (c *AuthController) Login() {
+	models.Cache.Incr("LoginNum")
 	if c.GetSession("user") != nil {
 		c.Redirect(beego.URLFor("UserController.Query"), http.StatusFound)
 		return
@@ -24,7 +26,7 @@ func (c *AuthController) Login() {
 		form.Name = c.Ctx.Input.Query("name")
 		form.Password = c.Ctx.Input.Query("password")
 		fmt.Println("Get Form:", form)
-		user, err := models.GetUserByName(form.Name)
+		user, err := services.UserService.GetByName(form.Name)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -66,7 +68,7 @@ func (c *AuthController) Register() {
 	user.Gender, _ = c.GetInt("gender")
 	fmt.Println(user)
 	if c.Ctx.Input.IsPost() {
-		users, err := models.GetUserByName(user.Name)
+		users, err := services.UserService.GetByName(user.Name)
 		fmt.Println(err)
 		fmt.Println(users)
 		if err == nil {
@@ -75,7 +77,7 @@ func (c *AuthController) Register() {
 		} else {
 
 			fmt.Println("")
-			models.CreateUser(&user)
+			services.UserService.Create(&user)
 		}
 	}
 	fmt.Println(error)

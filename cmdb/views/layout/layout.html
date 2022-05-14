@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<!--    <title>{{ config "String" "APPName" "cmdb"}}</title>-->
+    <title>{{ .title}}</title>
+    {{ assets_css "/static/component/bootstrap-4.3.1/css/bootstrap.min.css"}}
+
+</head>
+<body style="padding-top: 60px">
+{{ template "templates/navbar.html" . }}
+<a href="{{urlfor `AuthController.Logout`}}">退出登录</a>
+<div class="container-fluid mt-2">
+    <div class="row">
+        <div class="col-12">
+            {{ .LayoutContent }}
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

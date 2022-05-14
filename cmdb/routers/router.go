@@ -10,4 +10,5 @@ func init() {
 	beego.AutoRouter(&controllers.HomeController{})
 	beego.AutoRouter(&controllers.UserController{})
 	beego.AutoRouter(&controllers.PasswordController{})
+	beego.ErrorController(&controllers.ErrorController{})
 }

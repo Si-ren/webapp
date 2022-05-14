@@ -5,4 +5,5 @@ func init() {
 	//orm.RunSyncdb("default", false, true)
 	//
 	//mysql = orm.NewOrm()
+
 }

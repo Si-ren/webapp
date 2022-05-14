@@ -13,7 +13,17 @@
     {{ template "templates/navbar.html" . }}
     <a href="{{urlfor `AuthController.Logout`}}">退出登录</a>
     <div class="container-fluid m-2">
+        {{ if .flash.notice  }}
+         <div class="row">
+             <div class="col">
+                 <div role="alert" class="alert alert-primary">
+                     {{.flash.notice}}
+                 </div>
+             </div>
+        </div>
+        {{end}}
         <div class="row">
+
             <div class="col-1">
                 <a href="" class="btn btn-primary">新建</a>
             </div>
