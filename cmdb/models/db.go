@@ -57,6 +57,7 @@ func init() {
 		log.Fatal(err)
 	}
 	orm.RegisterModel(&User{})
+	orm.RegisterModel(&Node{}, &Job{}, &Target{})
 	orm.RunSyncdb("default", false, true)
 
 	mysql = orm.NewOrm()

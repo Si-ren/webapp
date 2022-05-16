@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户管理</title>
+    {{ assets_css "/static/component/bootstrap-4.3.1/css/bootstrap.min.css"}}
+
+    <style>
+
+    </style>
+</head>
+<body style="padding-top: 60px">
+    {{ template "templates/navbar.html" . }}
+    <a href="{{urlfor `AuthController.Logout`}}">退出登录</a>
+    <div class="container-fluid m-2">
+        {{ if .flash.notice  }}
+         <div class="row">
+             <div class="col">
+                 <div role="alert" class="alert alert-primary">
+                     {{.flash.notice}}
+                 </div>
+             </div>
+        </div>
+        {{end}}
+        <div class="row">
+
+            <div class="col-1">
+                <a href="" class="btn btn-primary">新建</a>
+            </div>
+            <div class="col-11">
+                <form class="form-inline mb-2 float-right" action="/user/getuser" method="get">
+                    <div class="form-group mr-2">
+                        <label class="sr-only">查询</label>
+                        <input class="form-control" placeholder="请输入查询字符串" name="query" value="">
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" class="btn  btn-outline-primary " value="查询">
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+        <div class="row">
+            <table class="table table-striped  table-hover table-sm table-bordered">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>员工编号</th>
+                    <th>用户名</th>
+                    <th>姓名</th>
+                    <th>联系方式</th>
+                    <th>邮箱</th>
+                    <th>性别</th>
+                    <th>联系地址</th>
+                    <th>部门</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {{ range .users }}
+                <tr>
+                    <td>{{ .ID }}</td>
+                    <td>{{ .StaffID }}</td>
+                    <td>{{ .NickName }}</td>
+                    <td>{{ .Name }}</td>
+                    <td>{{ .Tel }}</td>
+                    <td>{{ .Email }}</td>
+                    <!--                    原本返回值为int,现在直接调用user的方法返回string-->
+                    <td>{{ .GenderText }}</td>
+                    <td>{{ .Addr }}</td>
+                    <td>{{ .Department }}</td>
+                    <!--                    原本返回值为int,现在直接调用user的方法返回string-->
+                    <td>{{ .StatusText }}</td>
+                    <td >
+                        <a href="{{urlfor `UserController.Modify`}}?id={{ .ID }}" class="btn btn-sm btn-block btn-outline-primary">修改</a>
+                        {{ if ne $.loginUser.ID .ID}}
+                        <a href="{{urlfor `UserController.Delete`}}?id={{ .ID }}" class="btn btn-sm btn-block btn-outline-primary">删除</a>
+                        {{ end }}
+                    </td>
+                </tr>
+                {{end}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+
+<!--<form action="{{ urlfor `UserController.GetUser`}}" method="get">-->
+
+
+</body>
+</html>

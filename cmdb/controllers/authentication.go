@@ -14,10 +14,13 @@ type Authentication struct {
 }
 
 func (c *Authentication) Prepare() {
-	sessionValue := c.GetSession("user")
+	//这里是layout的功能,如果html中有用到数据,必须传值,没有值则传"",例:c.Data["subnav"] = ""
 	controllerName, actionName := c.GetControllerAndAction()
 	fmt.Println(controllerName, actionName)
 	c.Data["nav"] = controllerName
+	c.Data["subnav"] = ""
+	//session功能
+	sessionValue := c.GetSession("user")
 	if sessionValue != nil {
 		fmt.Println("")
 		if ID, ok := sessionValue.(int); ok {
