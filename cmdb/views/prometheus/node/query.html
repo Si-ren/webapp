@@ -25,10 +25,10 @@
         <div class="row">
 
             <div class="col-1">
-                <a href="" class="btn btn-primary">新建</a>
+                <a href="{{urlfor `NodeController.Create`}}" class="btn btn-primary">新建</a>
             </div>
             <div class="col-11">
-                <form class="form-inline mb-2 float-right" action="/user/getuser" method="get">
+                <form class="form-inline mb-2 float-right" action="/node/query" method="get">
                     <div class="form-group mr-2">
                         <label class="sr-only">查询</label>
                         <input class="form-control" placeholder="请输入查询字符串" name="query" value="">
@@ -46,40 +46,32 @@
                 <thead>
                 <tr>
                     <th>ID</th>
-                    <th>员工编号</th>
-                    <th>用户名</th>
-                    <th>姓名</th>
-                    <th>联系方式</th>
-                    <th>邮箱</th>
-                    <th>性别</th>
-                    <th>联系地址</th>
-                    <th>部门</th>
-                    <th>状态</th>
+                    <th>UUID</th>
+                    <th>主机名</th>
+                    <th>主机地址</th>
+                    <th>创建时间</th>
+                    <th>更新时间</th>
                     <th>操作</th>
                 </tr>
                 </thead>
 
                 <tbody>
-                {{ range .users }}
+                {{ range .nodes }}
                 <tr>
                     <td>{{ .ID }}</td>
-                    <td>{{ .StaffID }}</td>
-                    <td>{{ .NickName }}</td>
-                    <td>{{ .Name }}</td>
-                    <td>{{ .Tel }}</td>
-                    <td>{{ .Email }}</td>
-                    <!--                    原本返回值为int,现在直接调用user的方法返回string-->
-                    <td>{{ .GenderText }}</td>
+                    <td>{{ .UUID }}</td>
+                    <td>{{ .Hostname }}</td>
                     <td>{{ .Addr }}</td>
-                    <td>{{ .Department }}</td>
-                    <!--                    原本返回值为int,现在直接调用user的方法返回string-->
-                    <td>{{ .StatusText }}</td>
+                    <td>{{ dateformat .CreateAt "2006-01-02 15:04:05" }}</td>
+                    <td>{{ dateformat .UpdateAt "2006-01-02 15:04:05" }}</td>
                     <td >
-                        <a href="{{urlfor `UserController.Modify`}}?id={{ .ID }}" class="btn btn-sm btn-block btn-outline-primary">修改</a>
-                        {{ if ne $.loginUser.ID .ID}}
-                        <a href="{{urlfor `UserController.Delete`}}?id={{ .ID }}" class="btn btn-sm btn-block btn-outline-primary">删除</a>
-                        {{ end }}
+                        <a href="{{urlfor `NodeController.Modify`}}?id={{ .ID }}" class="btn btn-sm btn-block btn-outline-primary">修改</a>
+                        <a href="{{urlfor `NodeController.Delete`}}?id={{ .ID }}" class="btn btn-sm btn-block btn-outline-primary">删除</a>
                     </td>
+                </tr>
+                {{else}}
+                <tr>
+                    <td colspan="7">暂无数据</td>
                 </tr>
                 {{end}}
                 </tbody>
