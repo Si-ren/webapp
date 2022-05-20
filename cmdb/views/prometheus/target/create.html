@@ -1,0 +1,35 @@
+
+<form action="{{ urlfor `JobController.Create`}}" method="post">
+    <!--                试了下beego 1.23.0没用，有点操蛋-->
+    <input type="hidden" name="_xsrf" value="{{ .xsrf_token}}">
+    <div class="form-group ">
+        <label class="col-form-label col-4">Key</label>
+        <div class="col-8">
+            <input type="text" class="form-control" name="key" value="{{ .form.Key}}">
+        </div>
+    </div>
+    <div class="form-group ">
+        <label class="col-form-label col-4">备注</label>
+        <div class="col-8">
+            <textarea  class="form-control" name="remark">{{ .form.Remark}}</textarea>
+        </div>
+    </div>
+    <div class="form-group ">
+        <label class="col-form-label col-4">节点</label>
+        <div class="col-8">
+            <select name="node" class="form-control">
+                {{range .nodes }}
+                <option value="{{.ID}}">{{.Addr}} {{.Hostname}}</option>
+                {{else}}
+                <option value="0">暂无节点可用</option>
+                {{end}}
+            </select>
+        </div>
+    </div>
+    <div class="form-group ">
+        <div class="col-6 ">
+            <input type="submit" class="btn btn-info" value="更新">
+        </div>
+    </div>
+
+</form>

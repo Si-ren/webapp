@@ -12,3 +12,10 @@ type JobModifyForm struct {
 	Remark string `form:"remark"`
 	Node   int    `form:"node"`
 }
+
+type TargetModifyForm struct {
+	ID     int    `form:"id"`
+	Name   string `form:"name"`
+	Remark string `form:"remark"`
+	Job    int    `form:"job"`
+}

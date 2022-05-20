@@ -1,6 +1,7 @@
 package services
 
 import (
+	"cmdb/forms"
 	"cmdb/models"
 	"fmt"
 	"github.com/astaxie/beego/orm"
@@ -23,7 +24,7 @@ func (s *targetService) Query(query string) (targets []*models.Target, err error
 		qcond = qcond.Or("remark__icontains", query)
 		cond = cond.AndCond(qcond)
 	}
-	rows, err := querySet.SetCond(cond).All(&targets)
+	rows, err := querySet.RelatedSel().SetCond(cond).All(&targets)
 	fmt.Println("QueryUser :", rows, err)
 	return targets, err
 }
@@ -45,4 +46,16 @@ func (s *targetService) DeleteByID(ID int) {
 		mysql := orm.NewOrm()
 		mysql.Update(target, "DeleteAt")
 	}
+}
+
+func (s *targetService) Modify(form *forms.TargetModifyForm) error {
+	target := s.GetByID(form.ID)
+	if target == nil {
+		return fmt.Errorf("job is exits. Create job failed")
+	}
+	target.Name = form.Name
+	target.Remark = form.Remark
+	target.Job = JobService.GetByID(form.ID)
+	orm.NewOrm().Update(target)
+	return nil
 }
