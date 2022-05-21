@@ -12,7 +12,7 @@ type JobController struct {
 	prometheusController
 }
 
-func (c *JobController) PrePare() {
+func (c *JobController) Prepare() {
 	c.prometheusController.Prepare()
 }
 

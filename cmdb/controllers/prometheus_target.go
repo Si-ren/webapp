@@ -12,7 +12,7 @@ type TargetController struct {
 	prometheusController
 }
 
-func (c *TargetController) PrePare() {
+func (c *TargetController) Prepare() {
 	c.prometheusController.Prepare()
 }
 
@@ -40,10 +40,10 @@ func (c *TargetController) Delete() {
 }
 
 func (c *TargetController) Create() {
-	form := &forms.JobCreateForm{}
+	form := &forms.TargetCreateForm{}
 	if c.Ctx.Input.IsPost() {
 		if err := c.ParseForm(form); err == nil {
-			services.JobService.Create(form)
+			services.TargetService.Create(form)
 			c.Redirect(beego.URLFor("JobController.Query"), http.StatusFound)
 		}
 	}

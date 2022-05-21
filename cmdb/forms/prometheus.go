@@ -19,3 +19,15 @@ type TargetModifyForm struct {
 	Remark string `form:"remark"`
 	Job    int    `form:"job"`
 }
+type TargetCreateForm struct {
+	ID     int    `form:"id"`
+	Name   string `form:"name"`
+	Remark string `form:"remark"`
+	Job    int    `form:"job"`
+}
+
+type NodeRegisterForm struct {
+	UUID     string `json:"uuid"`
+	Hostname string `json:"hostname"`
+	Addr     string `json:"addr"`
+}

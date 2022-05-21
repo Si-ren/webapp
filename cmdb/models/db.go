@@ -44,6 +44,10 @@ func init() {
 		beego.AppConfig.String("mysql::Port"),
 	)
 	fmt.Println(DSN)
+
+	fmt.Println("Beego CopyRequestBody :", beego.AppConfig.String("CopyRequestBody"))
+
+	orm.Debug = true
 	//注册驱动
 	err := orm.RegisterDriver("mysql", orm.DRMySQL) //orm已经注册了，可省略
 	fmt.Println("orm.RegisterDriver", err)

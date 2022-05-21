@@ -2,6 +2,8 @@ package models
 
 import "time"
 
+//https://beego.vip/docs/mvc/model/models.md
+
 type Node struct {
 	ID       int        `orm:"column(id)"`
 	UUID     string     `orm:"column(uuid);varchar(64)"`
@@ -31,5 +33,6 @@ type Target struct {
 	CreateAt *time.Time `orm:"auto_now_add"`
 	UpdateAt *time.Time `orm:"auto_now"`
 	DeleteAt *time.Time `orm:"null"`
-	Job      *Job       `orm:"rel(fk)"`
+	//删除时,外键设置为null
+	Job *Job `orm:"null;rel(fk);on_delete(set_null)"`
 }

@@ -20,6 +20,7 @@ func (c *Authentication) Prepare() {
 	c.Data["nav"] = controllerName
 	c.Data["subnav"] = ""
 	//session功能
+	c.Data["xsrf_token"] = c.XSRFToken()
 	sessionValue := c.GetSession("user")
 	if sessionValue != nil {
 		fmt.Println("")

@@ -7,7 +7,7 @@
     <div class="form-group ">
         <label class="col-form-label col-4">Name</label>
         <div class="col-8">
-            <input type="text" class="form-control" name="key" value="{{ .form.Name}}">
+            <input type="text" class="form-control" name="name" value="{{ .form.Name}}">
         </div>
     </div>
     <div class="form-group ">
@@ -19,9 +19,9 @@
     <div class="form-group ">
         <label class="col-form-label col-4">Job</label>
         <div class="col-8">
-            <select name="node" class="form-control">
+            <select name="job" class="form-control">
                 {{range .jobs }}
-                <option value="{{.ID}}" {{if eq .ID $.form.Job }} selected {{end}}>{{.Node.Addr}} {{.Node.Hostname}}</option>
+                <option value="{{.ID}}" {{if eq .ID $.form.Job }} selected {{end}}>{{ .Key }}({{ .Remark }})}</option>
                 {{else}}
                 <option value="0">暂无节点可用</option>
                 {{end}}

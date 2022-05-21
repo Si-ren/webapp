@@ -11,7 +11,7 @@ type NodeController struct {
 	prometheusController
 }
 
-func (c *NodeController) PrePare() {
+func (c *NodeController) Prepare() {
 	c.prometheusController.Prepare()
 }
 

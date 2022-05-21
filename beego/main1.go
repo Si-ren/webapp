@@ -98,6 +98,7 @@ func (c *MyController) File() {
 //获取json要开启配置文件CopyRequestBody
 func (c *MyController) Json() {
 	var m map[string]interface{}
+	fmt.Println(c.Ctx.Input.RequestBody)
 	json.Unmarshal(c.Ctx.Input.RequestBody, &m)
 	fmt.Println("json", m)
 	for k, v := range m {
@@ -185,6 +186,7 @@ func (c *MyController) Header() {
 
 }
 func main() {
+	beego.BConfig.CopyRequestBody = true
 	beego.Get("/", func(ctx *context.Context) {
 		ctx.Output.Body([]byte("hello world"))
 	})

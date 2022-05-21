@@ -6,7 +6,7 @@ type prometheusController struct {
 	Authentication
 }
 
-func (c *prometheusController) PrePare() {
+func (c *prometheusController) Prepare() {
 	c.Authentication.Prepare()
 	c.Data["nav"] = "prometheus"
 	controller, action := c.GetControllerAndAction()

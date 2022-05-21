@@ -30,7 +30,7 @@ func (s *jobService) Query(query string) (jobs []*models.Job, err error) {
 	fmt.Println("QueryUser :", rows, err)
 	for _, job := range jobs {
 		mysql.LoadRelated(job, "Node")
-		fmt.Printf("%#v\n", job.Node)
+		//fmt.Printf("%#v\n", job.Node)
 	}
 	return jobs, err
 }
@@ -82,4 +82,16 @@ func (s *jobService) Modify(form *forms.JobModifyForm) error {
 	job.Node = NodeService.GetByID(form.ID)
 	orm.NewOrm().Update(job)
 	return nil
+}
+
+func (s *jobService) QueryByUUID(uuid string) []*models.Job {
+	var jobs []*models.Job
+	mysql := orm.NewOrm()
+	querySet := mysql.QueryTable(&models.Job{})
+	querySet.RelatedSel().Filter("delete_at__isnull", true).Filter("node_id__uuid", uuid).All(&jobs)
+	//反向关联,反向关联jobs中的targets,即target表中的job
+	for _, job := range jobs {
+		mysql.LoadRelated(job, "Target")
+	}
+	return jobs
 }

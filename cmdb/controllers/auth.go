@@ -38,6 +38,7 @@ func (c *AuthController) Login() {
 			//记录用户状态(session,记录服务器)
 
 			c.SetSession("user", user.ID)
+			c.Data["xsrf_token"] = c.XSRFToken()
 			c.Redirect(beego.URLFor("UserController.GetUser"), http.StatusFound)
 			//c.Redirect("/user/getuser", http.StatusFound)
 
@@ -82,6 +83,7 @@ func (c *AuthController) Register() {
 	}
 	fmt.Println(error)
 	c.Data["error"] = error
+	c.Data["xsrf_token"] = c.XSRFToken()
 	c.TplName = "auth/register.html"
 }
 

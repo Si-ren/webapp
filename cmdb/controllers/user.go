@@ -34,6 +34,7 @@ func (c *UserController) GetUser() {
 	if err != nil {
 		fmt.Println(users, err)
 	}
+	c.Data["xsrf_token"] = c.XSRFToken()
 	c.Data["users"] = users
 	c.TplName = "user/query.html"
 }

@@ -1,6 +1,7 @@
 package services
 
 import (
+	"cmdb/forms"
 	"cmdb/models"
 	"fmt"
 	"github.com/astaxie/beego/orm"
@@ -46,4 +47,21 @@ func (s *nodeService) DeleteByID(ID int) {
 		mysql := orm.NewOrm()
 		mysql.Update(node, "DeleteAt")
 	}
+}
+
+func (s *nodeService) Register(form *forms.NodeRegisterForm) *models.Node {
+	node := &models.Node{UUID: form.UUID}
+	mysql := orm.NewOrm()
+	if err := mysql.Read(node, "UUID"); err == nil {
+		//查找到数据
+		return nil
+	} else if err == orm.ErrNoRows {
+		//没有查到数据,进行插入
+		node.Hostname = form.Hostname
+		node.Addr = form.Addr
+		mysql.Insert(node)
+	} else {
+		return nil
+	}
+	return node
 }
