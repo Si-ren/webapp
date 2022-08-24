@@ -23,7 +23,7 @@ var initCommand = &cobra.Command{
 
 func init() {
 	rootCommand.AddCommand(initCommand)
-	//go run main.go init -d 123 -f -v,使用这些-f等长短参数
+	//go run main1.go init -d 123 -f -v,使用这些-f等长短参数
 	initCommand.Flags().StringVarP(&db, "database", "d", "default", "database")
 	initCommand.Flags().BoolVarP(&force, "force", "f", false, "force syncdb")
 	//initCommand.Flags().BoolVarP(&verbose, "verbose", "v", false, "verbose")

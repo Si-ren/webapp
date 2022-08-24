@@ -1,0 +1,13 @@
+---
+addr: 192.168.137.60:9090
+server:
+  token: xxxx
+  addr: http://localhost:8080/
+log:
+  filename: logs/proagnet.log
+  maxbackups: 7
+  maxsize: 5
+  compress: true
+task:
+  register:
+    interval: 120s
