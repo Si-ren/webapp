@@ -5,6 +5,7 @@ go 1.18
 require (
 	github.com/astaxie/beego v1.12.3
 	github.com/go-sql-driver/mysql v1.6.0
+	github.com/spf13/cobra v1.4.0
 	golang.org/x/crypto v0.0.0-20220411220226-7b82a4e95df4
 	gorm.io/driver/mysql v1.3.3
 	gorm.io/gorm v1.23.4
@@ -25,7 +26,6 @@ require (
 	github.com/prometheus/common v0.10.0 // indirect
 	github.com/prometheus/procfs v0.1.3 // indirect
 	github.com/shiena/ansicolor v0.0.0-20151119151921-a422bbe96644 // indirect
-	github.com/spf13/cobra v1.4.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	golang.org/x/net v0.0.0-20211112202133-69e39bad7dc2 // indirect
 	golang.org/x/sys v0.0.0-20210615035016-665e8c7367d1 // indirect
