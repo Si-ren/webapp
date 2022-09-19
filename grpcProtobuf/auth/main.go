@@ -16,6 +16,6 @@ func main() {
 		logrus.Panic("Auth listen error")
 	}
 	s := grpc.NewServer()
-	authpb.RegisterAuthServiceServer(s, &auth.Service{})
+	authpb.RegisterAuthServiceServer(s, &auth.Service{OAuthAuthentication: nil})
 	logrus.Fatal(s.Serve(lis))
 }
