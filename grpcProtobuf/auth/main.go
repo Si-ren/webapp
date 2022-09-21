@@ -1,10 +1,14 @@
 package main
 
 import (
+	"context"
 	"github.com/sirupsen/logrus"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"google.golang.org/grpc"
 	authpb "grpcProtobuf/auth/api/v1"
 	"grpcProtobuf/auth/auth"
+	"grpcProtobuf/auth/dao"
 	"net"
 )
 
@@ -16,6 +20,9 @@ func main() {
 		logrus.Panic("Auth listen error")
 	}
 	s := grpc.NewServer()
-	authpb.RegisterAuthServiceServer(s, &auth.Service{OAuthAuthentication: nil})
+	c := context.Background()
+	mgc, err := mongo.Connect(c, options.Client().ApplyURI("mongodb://192.168.179.128:27017"))
+	col := dao.NewMongodb(mgc.Database("grpcProtobuf"))
+	authpb.RegisterAuthServiceServer(s, &auth.Service{OAuthAuthentication: nil, Mongodb: col})
 	logrus.Fatal(s.Serve(lis))
 }
