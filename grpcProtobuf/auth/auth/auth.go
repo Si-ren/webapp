@@ -9,17 +9,17 @@ import (
 	"grpcProtobuf/auth/dao"
 )
 
-type Service struct {
-	OAuthAuthentication OAuthAuthentication
-	Mongodb             *dao.Mongodb
-}
-
 type OAuthAuthentication interface {
 	Resolve(code string) (string, error)
 }
 
+type Service struct {
+	// OAuthAuthentication OAuthAuthentication
+	Mongodb *dao.Mongodb
+}
+
 func (s *Service) Login(c context.Context, req *authpb.LoginRequest) (loginResponse *authpb.LoginResponse, err error) {
-	logrus.Info("This is auth rpc login")
+	//logrus.Info("This is auth rpc login")
 	//OAuth, err := s.OAuthAuthentication.Resolve(req.Code)
 	//if err != nil {
 	//	return nil, status.Errorf(codes.Unavailable, "cannot resolve OAuth : %v", err)
@@ -27,6 +27,7 @@ func (s *Service) Login(c context.Context, req *authpb.LoginRequest) (loginRespo
 	OAuth := req.Code
 	logrus.Info(req.Code)
 	accountID, err := s.Mongodb.FindID(c, OAuth)
+	logrus.Info(accountID)
 	if err != nil {
 		logrus.Error("cant resolve account id :", err)
 		return nil, status.Error(codes.Internal, "")
@@ -37,6 +38,6 @@ func (s *Service) Login(c context.Context, req *authpb.LoginRequest) (loginRespo
 	}, nil
 }
 
-func (s *Service) Resolve(code string) (string, error) {
-	return code, nil
-}
+//func (s *Service) Resolve(code string) (string, error) {
+//	return code, nil
+//}

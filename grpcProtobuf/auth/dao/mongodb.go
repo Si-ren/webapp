@@ -20,13 +20,14 @@ func NewMongodb(db *mongo.Database) *Mongodb {
 }
 
 func (m *Mongodb) FindID(c context.Context, name string) (string, error) {
-	res, err := m.col.Find(c, bson.M{
+	res := m.col.FindOne(c, bson.M{
 		"Name": name,
-	})
-	if err != nil {
-		logrus.Error("Mongodb FindRows Error:", err)
-		return "", fmt.Errorf("Mongodb FindName err: %v ", err)
-	}
+	}, &options.FindOneOptions{AllowPartialResults: nil})
+	logrus.Info(res)
+	//if err != nil {
+	//	logrus.Error("Mongodb FindRows Error:", err)
+	//	return "", fmt.Errorf("Mongodb FindName err: %v ", err)
+	//}
 	var row struct {
 		ID     primitive.ObjectID `bson:"_id"`
 		Name   string             `bson:"Name"`
@@ -34,9 +35,12 @@ func (m *Mongodb) FindID(c context.Context, name string) (string, error) {
 		Salary string             `bson:"Salary"`
 		Sex    string             `bson:"Sex"`
 	}
-	err = res.Decode(&row)
+	err := res.Decode(&row)
+	if err != nil {
+		logrus.Error("Mongodb FindID Decode err :", err)
+	}
 	logrus.Info(row)
-	return row.Name, nil
+	return row.ID.Hex(), nil
 }
 
 func (m *Mongodb) FindAndUpdate(c context.Context, oldNum string, newNum string) (string, error) {

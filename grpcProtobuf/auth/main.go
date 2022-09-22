@@ -21,8 +21,11 @@ func main() {
 	}
 	s := grpc.NewServer()
 	c := context.Background()
-	mgc, err := mongo.Connect(c, options.Client().ApplyURI("mongodb://192.168.179.128:27017"))
+	mgc, err := mongo.Connect(c, options.Client().ApplyURI("mongodb://122.51.16.26:27017"))
 	col := dao.NewMongodb(mgc.Database("grpcProtobuf"))
-	authpb.RegisterAuthServiceServer(s, &auth.Service{OAuthAuthentication: nil, Mongodb: col})
+	authpb.RegisterAuthServiceServer(s, &auth.Service{
+		//OAuthAuthentication: nil,
+		Mongodb: col,
+	})
 	logrus.Fatal(s.Serve(lis))
 }
