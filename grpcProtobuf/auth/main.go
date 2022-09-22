@@ -21,7 +21,7 @@ func main() {
 	}
 	s := grpc.NewServer()
 	c := context.Background()
-	mgc, err := mongo.Connect(c, options.Client().ApplyURI("mongodb://122.51.16.26:27017"))
+	mgc, err := mongo.Connect(c, options.Client().ApplyURI("mongodb://siri:Wxr0910+1s@122.51.16.26:17018/grpcProtobuf"))
 	col := dao.NewMongodb(mgc.Database("grpcProtobuf"))
 	authpb.RegisterAuthServiceServer(s, &auth.Service{
 		//OAuthAuthentication: nil,

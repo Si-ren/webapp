@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"grpcProtobuf/auth/model"
 )
 
 type Mongodb struct {
@@ -28,19 +28,13 @@ func (m *Mongodb) FindID(c context.Context, name string) (string, error) {
 	//	logrus.Error("Mongodb FindRows Error:", err)
 	//	return "", fmt.Errorf("Mongodb FindName err: %v ", err)
 	//}
-	var row struct {
-		ID     primitive.ObjectID `bson:"_id"`
-		Name   string             `bson:"Name"`
-		Age    string             `bson:"Age"`
-		Salary string             `bson:"Salary"`
-		Sex    string             `bson:"Sex"`
-	}
-	err := res.Decode(&row)
+	stu := &model.Student{}
+	err := res.Decode(&stu)
 	if err != nil {
 		logrus.Error("Mongodb FindID Decode err :", err)
 	}
-	logrus.Info(row)
-	return row.ID.Hex(), nil
+	//logrus.Info(stu)
+	return stu.ID.Hex(), nil
 }
 
 func (m *Mongodb) FindAndUpdate(c context.Context, oldNum string, newNum string) (string, error) {
@@ -55,17 +49,11 @@ func (m *Mongodb) FindAndUpdate(c context.Context, oldNum string, newNum string)
 	if err := res.Err(); err != nil {
 		return "", fmt.Errorf("Mongodb FindOneAndUpdate err: %v ", err)
 	}
-	var row struct {
-		ID     primitive.ObjectID `bson:"_id"`
-		Name   string             `bson:"Name"`
-		Age    string             `bson:"Age"`
-		Salary string             `bson:"Salary"`
-		Sex    string             `bson:"Sex"`
-	}
-	err := res.Decode(&row)
+	stu := &model.Student{}
+	err := res.Decode(&stu)
 	if err != nil {
 		return "", fmt.Errorf("Mongodb Decode Result err: %v ", err)
 	}
-	return row.ID.Hex(), nil
+	return stu.ID.Hex(), nil
 
 }
