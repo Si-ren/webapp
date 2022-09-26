@@ -16,7 +16,6 @@ type Mongodb struct {
 
 func NewMongodb(db *mongo.Database) *Mongodb {
 	return &Mongodb{col: db.Collection("test")}
-
 }
 
 func (m *Mongodb) FindID(c context.Context, name string) (string, error) {
