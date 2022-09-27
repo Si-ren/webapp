@@ -1,0 +1,19 @@
+syntax="proto3";
+package class.v1;
+option go_package="grpcProtobuf/class/api/v1;classpb";
+
+
+//https://grpc-ecosystem.github.io/grpc-gateway/docs/mapping/grpc_api_configuration/
+
+//protoc -I .  --go_out ./v1   --go_opt=paths=source_relative   --go-grpc_out  ./v1   --go-grpc_opt=require_unimplemented_servers=false paths=source_relative   class.proto
+message GrabClassRequest {
+  string  class =1 ;
+}
+
+message ClassResponse{
+  bool isGet = 1;
+}
+
+service  ClassService{
+  rpc GrabClass(GrabClassRequest) returns (ClassResponse){};
+}

@@ -28,7 +28,7 @@ func main() {
 		logrus.Panic("IO Read privateKey file err: ", err)
 	}
 	logrus.Info("Start auth server")
-	lis, err := net.Listen("tcp", ":9090")
+	lis, err := net.Listen("tcp", ":8083")
 	if err != nil {
 		logrus.Panic("Auth listen error")
 	}
