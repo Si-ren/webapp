@@ -1,0 +1,38 @@
+syntax="proto3";
+package blob.v1;
+option go_package="grpcProtobuf/auth/api/v1;blobpb";
+
+
+message  CreateBolbRequest{
+    string AccountId=1;
+  string PhotoUrl=2;
+
+}
+message  CreateBolbResponse{
+    string id=1;
+    string BolbUrl=2;
+}
+
+message  GetBolbRequest{
+    string AccountId=1;
+}
+
+message  GetBolbResponse{
+  bytes data=1;
+}
+
+message  GetBolbUrlRequest{
+   string AccountId=1;
+}
+
+message  GetBolbUrlResponse{
+  string BolbUrl=1;
+}
+
+
+service  BlobService {
+  rpc CreateBolb (CreateBolbRequest) returns(CreateBolbResponse){};
+  rpc GetBolb (GetBolbRequest) returns(GetBolbResponse){};
+  rpc GetBolbUrl (GetBolbUrlRequest) returns(GetBolbUrlResponse){};
+}
+

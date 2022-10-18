@@ -30,7 +30,7 @@ func Interceptor(publicKeyFile string) (grpc.UnaryServerInterceptor, error) {
 	}
 	b, err := io.ReadAll(f)
 	if err != nil {
-		return nil, fmt.Errorf("cant open publicKeyFile : %v", err)
+		return nil, fmt.Errorf("cant read publicKeyFile : %v", err)
 	}
 	pubKey, err := jwt.ParseRSAPublicKeyFromPEM(b)
 	if err != nil {
@@ -93,5 +93,5 @@ func (i *interceptor) HandleReq(ctx context.Context, req interface{}, info *grpc
 	if err != nil {
 		return nil, status.Errorf(codes.Unavailable, "token verify failed")
 	}
-	return handler(ContextWithAccountID(ctx, aid), req)
+	return handler(ContextWithAccountID(ctx, id.AccountID(aid)), req)
 }

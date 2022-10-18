@@ -26,4 +26,5 @@ func main() {
 
 	classpb.RegisterClassServiceServer(s, &class.Service{})
 	log.Fatalln(s.Serve(lis))
+
 }

@@ -1,0 +1,13 @@
+type: google.api.Service
+config_version: 3
+
+http:
+  rules:
+    - selector: bolb.v1.BlobService.CreateBolb
+      post: /v1/blob/createblob
+      body: "*"
+    - selector: bolb.v1.BlobService.GetBlob
+      get: /v1/blob/getblob
+    - selector: bolb.v1.BlobService.GetBlobUrl
+      post: /v1/blob/getbloburl
+      body: "*"
