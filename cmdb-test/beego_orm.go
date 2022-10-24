@@ -21,12 +21,12 @@ type Student1 struct {
 	UpdateTime *time.Time `orm:"auto_now"`        //默认为当前时间
 }
 
-//修改表名为stu,默认为student
+// 修改表名为stu,默认为student
 func (s *Student1) TableName() string {
 	return "stu"
 }
 
-//为表创建索引,可以为联合索引
+// 为表创建索引,可以为联合索引
 func (s *Student1) TableIndex() [][]string {
 	return [][]string{
 		{"ID"},
@@ -45,7 +45,7 @@ func main() {
 	//		同步表结构
 	//		数据:增,删,改,查
 
-	DSN := "root:root@tcp(localhost:3306)/cmdb?parseTime=true"
+	DSN := "root:root@tcp(localhost:3306)/cmdb-test?parseTime=true"
 	//注册驱动
 	err := orm.RegisterDriver("mysql", orm.DRMySQL) //orm已经注册了，可省略
 	fmt.Println("orm.RegisterDriver", err)

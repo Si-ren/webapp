@@ -16,7 +16,7 @@ import (
 //
 //func init() {
 //
-//	DSN := fmt.Sprintf("%s:%s@tcp(%s:%s)/cmdb?parseTime=true",
+//	DSN := fmt.Sprintf("%s:%s@tcp(%s:%s)/cmdb-test?parseTime=true",
 //		beego.AppConfig.String("mysql::User"),
 //		beego.AppConfig.String("mysql::Password"),
 //		beego.AppConfig.String("mysql::Host"),
@@ -37,7 +37,7 @@ var (
 )
 
 func init() {
-	DSN := fmt.Sprintf("%s:%s@tcp(%s:%s)/cmdb?parseTime=true",
+	DSN := fmt.Sprintf("%s:%s@tcp(%s:%s)/cmdb-test?parseTime=true",
 		beego.AppConfig.String("mysql::User"),
 		beego.AppConfig.String("mysql::Password"),
 		beego.AppConfig.String("mysql::Host"),

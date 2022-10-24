@@ -7,11 +7,11 @@ import (
 )
 
 var rootCommand = &cobra.Command{
-	Use:   "cmdb",
-	Short: "cmdb program",
-	Long:  "This is cmdb program",
+	Use:   "cmdb-test",
+	Short: "cmdb-test program",
+	Long:  "This is cmdb-test program",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		fmt.Println("cmdb")
+		fmt.Println("cmdb-test")
 		return nil
 	},
 }

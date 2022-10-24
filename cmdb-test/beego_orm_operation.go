@@ -33,7 +33,7 @@ func main() {
 
 	//开启debug模式
 	orm.Debug = true
-	DSN := "root:root@tcp(localhost:3306)/cmdb?parseTime=true"
+	DSN := "root:root@tcp(localhost:3306)/cmdb-test?parseTime=true"
 	//注册驱动
 	err := orm.RegisterDriver("mysql", orm.DRMySQL) //orm已经注册了，可省略
 	fmt.Println("orm.RegisterDriver", err)

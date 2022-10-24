@@ -15,13 +15,13 @@ type Product struct {
 	Price uint   `gorm:"column:pricesss"`                                                //修改表名
 }
 
-//修改表名,不然默认为小写的结构体名称
+// 修改表名,不然默认为小写的结构体名称
 func (p *Product) TableName() string {
 	return "prod"
 }
 
 func main() {
-	DSN := fmt.Sprintf("%s:%s@tcp(%s:%s)/cmdb",
+	DSN := fmt.Sprintf("%s:%s@tcp(%s:%s)/cmdb-test",
 		"root", "root", "127.0.0.1", "3306",
 	)
 	db, err := gorm.Open(mysql.Open(DSN), &gorm.Config{

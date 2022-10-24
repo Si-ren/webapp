@@ -12,7 +12,7 @@ import (
 
 func main() {
 	addr := ":9999"
-	dsn := "root:root@tcp(localhost:3306)/cmdb?parseTime=true"
+	dsn := "root:root@tcp(localhost:3306)/cmdb-test?parseTime=true"
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
 		logrus.Fatal(err)

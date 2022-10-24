@@ -12,9 +12,9 @@ var (
 )
 
 var initCommand = &cobra.Command{
-	Use:   "init cmdb",
+	Use:   "init cmdb-test",
 	Short: "init db and so on",
-	Long:  "Init db and others before run cmdb",
+	Long:  "Init db and others before run cmdb-test",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		fmt.Println(db, force, verbose)
 		return nil

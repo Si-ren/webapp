@@ -2,7 +2,7 @@ package models
 
 //
 //import (
-//	"cmdb/utils"
+//	"cmdb-test/utils"
 //	"database/sql"
 //	"fmt"
 //	"golang.org/x/crypto/bcrypt"

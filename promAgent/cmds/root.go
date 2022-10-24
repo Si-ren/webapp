@@ -13,7 +13,7 @@ var (
 	rootCommand = &cobra.Command{
 		Use:   "promAgent",
 		Short: "Prometheus Agent",
-		Long:  "Prometheus Agent read config and upload to cmdb",
+		Long:  "Prometheus Agent read config and upload to cmdb-test",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			fmt.Println("This is cobra RunE")
 			fmt.Println("Prom Agent")

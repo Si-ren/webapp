@@ -52,7 +52,7 @@ func (r *Register) Run() {
 
 	for {
 		//先执行
-		fmt.Println("Send register info to cmdb")
+		fmt.Println("Send register info to cmdb-test")
 		resp, err := client.R().SetHeader("Authorization", fmt.Sprintf("Token %s", r.config.SeverConfig.Token)).
 			//SetQueryParam("uuid", r.config.UUID).
 			//SetQueryParam("addr", r.config.Addr).
