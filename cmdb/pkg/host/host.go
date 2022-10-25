@@ -16,7 +16,7 @@ const (
 
 type Vendor int
 
-func NewDefaultHost() *Host {
+func NewHost() *Host {
 	return &Host{
 		&Base{},
 		&Resource{},

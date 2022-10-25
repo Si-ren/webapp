@@ -2,9 +2,10 @@ package host
 
 import (
 	"context"
-	"github.com/go-playground/validator/v10"
 	"net/http"
 	"strconv"
+
+	"github.com/go-playground/validator/v10"
 )
 
 // use a single instance of Validate, it caches struct info
@@ -13,7 +14,7 @@ var (
 )
 
 type Service interface {
-	SaveHost(context.Context, *Host) (*Host, error)
+	CreateHost(context.Context, *Host) (*Host, error)
 	QueryHost(context.Context, *QueryHostRequest) (*HostSet, error)
 	UpdateHost(context.Context, *UpdateHostRequest) (*Host, error)
 	DescribeHost(context.Context, *DescribeHostRequest) (*Host, error)

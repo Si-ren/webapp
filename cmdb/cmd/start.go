@@ -3,10 +3,12 @@ package cmd
 import (
 	"cmdb/conf"
 	"cmdb/pkg"
+	"cmdb/pkg/host/http"
 	"cmdb/pkg/host/impl"
 	"cmdb/protocol"
 	"errors"
 	"fmt"
+
 	"github.com/sirupsen/logrus"
 
 	"os"
@@ -37,7 +39,7 @@ var serviceCmd = &cobra.Command{
 		if err := impl.Service.Config(); err != nil {
 			return err
 		}
-		pkg.Host = impl.Service
+		pkg.Host = http.NewHostHandler()
 
 		// 启动服务
 		ch := make(chan os.Signal, 1)
