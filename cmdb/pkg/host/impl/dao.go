@@ -6,7 +6,7 @@ import (
 	"database/sql"
 )
 
-func (s *service) save(ctx context.Context, h *host.Host) error {
+func (s *service) create(ctx context.Context, h *host.Host) error {
 	var (
 		stmt *sql.Stmt
 		err  error
