@@ -4,6 +4,7 @@ import (
 	"cmdb/cmd"
 	"cmdb/pkg"
 	"cmdb/pkg/host"
+	"cmdb/pkg/host/impl"
 	"fmt"
 
 	"github.com/gin-gonic/gin"
@@ -30,7 +31,7 @@ func (h *handler) Config() error {
 	if pkg.Host == nil {
 		return fmt.Errorf("dependence service host not ready")
 	}
-	h.svc = pkg.Host
+	h.svc = impl.Service
 	return nil
 }
 
