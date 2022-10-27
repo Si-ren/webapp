@@ -1,12 +1,7 @@
 package http
 
 import (
-	"cmdb/cmd"
-	"cmdb/pkg"
 	"cmdb/pkg/host"
-	"cmdb/pkg/host/impl"
-	"fmt"
-
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 )
@@ -20,20 +15,11 @@ type handler struct {
 	log *logrus.Logger
 }
 
-func NewHostHandler(svc host.Service) *handler {
+func NewHostHandler(svc host.Service, log *logrus.Logger) *handler {
 	return &handler{
 		svc: svc,
-		log: cmd.Log,
+		log: log,
 	}
-}
-
-func (h *handler) Config() error {
-	h.log = cmd.Log
-	if pkg.Host == nil {
-		return fmt.Errorf("dependence service host not ready")
-	}
-	h.svc = impl.Service
-	return nil
 }
 
 func (h *handler) RegistryApi(r gin.IRouter) {

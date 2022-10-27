@@ -100,26 +100,36 @@ type Base struct {
 	DescribeHash string    `json:"describe_hash" gorm:"comment:描述数据Hash;not null"`        // 描述数据Hash
 }
 
+// TableName 会将 User 的表名重写为 `profiles`
+func (Base) TableName() string {
+	return "base"
+}
+
 type Resource struct {
 	gorm.Model
-	ExpireAt    time.Time         `json:"expire_at" gorm:"comment:过期时间"`                // 过期时间
-	Category    string            `json:"category" gorm:"comment:种类;not null"`          // 种类
-	Type        string            `json:"type" gorm:"comment:规格"`                       // 规格
-	Name        string            `json:"name" gorm:"comment:名称"`                       // 名称
-	Description string            `json:"description" gorm:"comment:描述"`                // 描述
-	Status      string            `json:"status" gorm:"comment:服务商中的状态;not null"`       // 服务商中的状态
-	Tags        map[string]string `json:"tags" gorm:"comment:标签"`                       // 标签
-	UpdateAt    time.Time         `json:"update_at" gorm:"autoUpdateTime;comment:更新时间"` // 更新时间
-	SyncAccount string            `json:"sync_accout" gorm:"comment:同步的账号"`             // 同步的账号
-	PublicIP    string            `json:"public_ip" gorm:"comment:公网IP"`                // 公网IP
-	PrivateIP   string            `json:"private_ip" gorm:"comment:内网IP"`               // 内网IP
-	PayType     string            `json:"pay_type" gorm:"comment:实例付费方式;not null"`      // 实例付费方式
+	ExpireAt    time.Time `json:"expire_at" gorm:"comment:过期时间"`                // 过期时间
+	Category    string    `json:"category" gorm:"comment:种类;not null"`          // 种类
+	Type        string    `json:"type" gorm:"comment:规格"`                       // 规格
+	Name        string    `json:"name" gorm:"comment:名称"`                       // 名称
+	Description string    `json:"description" gorm:"comment:描述"`                // 描述
+	Status      string    `json:"status" gorm:"comment:服务商中的状态;not null"`       // 服务商中的状态
+	Tags        string    `json:"tags" gorm:"comment:标签"`                       // 标签
+	UpdateAt    time.Time `json:"update_at" gorm:"autoUpdateTime;comment:更新时间"` // 更新时间
+	SyncAccount string    `json:"sync_accout" gorm:"comment:同步的账号"`             // 同步的账号
+	PublicIP    string    `json:"public_ip" gorm:"comment:公网IP"`                // 公网IP
+	PrivateIP   string    `json:"private_ip" gorm:"comment:内网IP"`               // 内网IP
+	PayType     string    `json:"pay_type" gorm:"comment:实例付费方式;not null"`      // 实例付费方式
+}
+
+// TableName 会将 User 的表名重写为 `profiles`
+func (Resource) TableName() string {
+	return "resource"
 }
 
 type Describe struct {
 	gorm.Model
 	ResourceId              string `json:"resource_id" gorm:"comment:关联Resource;size:255"`               // 关联Resource
-	CPU                     int    `json:"cpu" gorm:"comment:核数;not null;size:255;type:tinyint"`         // 核数
+	CPU                     int    `json:"cpu" gorm:"comment:核数;not null;type:tinyint;size:2"`           // 核数
 	Memory                  int    `json:"memory" gorm:"comment:内存;not null"`                            // 内存
 	GPUAmount               int    `json:"gpu_amount" gorm:"comment:GPU数量;type:tinyint"`                 // GPU数量
 	GPUSpec                 string `json:"gpu_spec" gorm:"comment:GPU类型"`                                // GPU类型
@@ -133,6 +143,10 @@ type Describe struct {
 	SecurityGroups          string `json:"security_groups" gorm:"comment:安全组 采用逗号分隔"`                    // 安全组  采用逗号分隔
 }
 
+// TableName 会将 User 的表名重写为 `profiles`
+func (Describe) TableName() string {
+	return "describe"
+}
 func NewHostSet() *HostSet {
 	return &HostSet{
 		Items: []*Host{},
