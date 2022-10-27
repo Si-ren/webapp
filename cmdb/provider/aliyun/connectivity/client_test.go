@@ -1,10 +1,9 @@
 package connectivity_test
 
 import (
+	"cmdb/provider/aliyun/connectivity"
 	"os"
 	"testing"
-
-	"gitee.com/infraboard/go-course/day14/demo/api/provider/aliyun/connectivity"
 )
 
 func TestClient(t *testing.T) {

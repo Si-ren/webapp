@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	api = &handler{}
+	HostHandler = &handler{}
 )
 
 type handler struct {
@@ -26,6 +26,7 @@ func NewHostHandler(svc host.Service) *handler {
 		log: cmd.Log,
 	}
 }
+
 func (h *handler) Config() error {
 	h.log = cmd.Log
 	if pkg.Host == nil {
@@ -38,3 +39,13 @@ func (h *handler) Config() error {
 func (h *handler) RegistryApi(r gin.IRouter) {
 	r.POST("/hosts", h.CreateHost)
 }
+
+// func RegistAPI(r *httprouter.Router) {
+// 	HostHandler.Config()
+// 	r.GET("/hosts", HostHandler.svc.CreateHost)
+// 	r.POST("/hosts", HostHandler.CreateHost)
+// 	r.GET("/hosts/:id", HostHandler.DescribeHost)
+// 	r.DELETE("/hosts/:id", HostHandler.DeleteHost)
+// 	r.PUT("/hosts/:id", HostHandler.PutHost)
+// 	r.PATCH("/hosts/:id", HostHandler.PatchHost)
+// }

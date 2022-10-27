@@ -7,9 +7,10 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+
 	"github.com/rs/xid"
 	"github.com/sirupsen/logrus"
-	"time"
+	"gorm.io/gorm"
 )
 
 const (
@@ -41,11 +42,12 @@ const (
 
 var (
 	// Service 服务实例
-	Service = &service{}
+	Service              = &service{}
+	_       host.Service = (*service)(nil)
 )
 
 type service struct {
-	db  *sql.DB
+	db  *gorm.DB
 	log *logrus.Logger
 }
 
@@ -64,7 +66,6 @@ func (s *service) CreateHost(ctx context.Context, h *host.Host) (
 	*host.Host, error) {
 	h.Id = xid.New().String()
 	h.ResourceId = h.Id
-	h.SyncAt = time.Now().Unix()
 
 	if err := s.create(ctx, h); err != nil {
 		return nil, err

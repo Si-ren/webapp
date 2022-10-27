@@ -2,13 +2,14 @@ package cmd
 
 import (
 	"cmdb/conf"
-	"cmdb/pkg"
+	"cmdb/pkg/host"
+
 	"cmdb/pkg/host/http"
 	"cmdb/pkg/host/impl"
-	"cmdb/protocol"
-	"errors"
-	"fmt"
 
+	"cmdb/protocol"
+
+	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 
 	"os"
@@ -26,10 +27,18 @@ var serviceCmd = &cobra.Command{
 	Long:  `Demo后端API服务`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		// 初始化全局变量
-		if err := loadGlobalConfig(confType); err != nil {
+		if err := loadGlobalConfig(ConfType); err != nil {
 			return err
 		}
 
+		//初始化数据库
+		db, err := conf.Configure().MySQL.GetDB()
+		if err != nil {
+			logrus.Panic("Database init error : ", err)
+		}
+		db.AutoMigrate(&host.Base{})
+		db.AutoMigrate(&host.Resource{})
+		db.AutoMigrate(&host.Describe{})
 		// 初始化全局日志配置
 		if err := loadGlobalLogger(); err != nil {
 			return err
@@ -39,7 +48,10 @@ var serviceCmd = &cobra.Command{
 		if err := impl.Service.Config(); err != nil {
 			return err
 		}
-		pkg.Host = http.NewHostHandler()
+
+		HostHandler := http.NewHostHandler(impl.Service)
+		router := gin.Default()
+		HostHandler.RegistryApi(router)
 
 		// 启动服务
 		ch := make(chan os.Signal, 1)
@@ -91,53 +103,6 @@ type service struct {
 
 func (s *service) start() error {
 	return s.http.Start()
-}
-
-// config 为全局变量, 只需要load 即可全局可用户
-func loadGlobalConfig(configType string) error {
-	// 配置加载
-	switch configType {
-	case "file":
-		err := conf.LoadConfigFromToml(confFile)
-		if err != nil {
-			return err
-		}
-	case "env":
-		err := conf.LoadConfigFromEnv()
-		if err != nil {
-			return err
-		}
-	case "etcd":
-		return errors.New("not implemented")
-	default:
-		return errors.New("unknown config type")
-	}
-	return nil
-}
-
-// log 为全局变量, 只需要load 即可全局可用户, 依赖全局配置先初始化
-func loadGlobalLogger() error {
-	lc := conf.Configure().Log
-	Log.SetLevel(LogLevel[lc.Level])
-	fmt.Println("log level: %s", lc.Level)
-
-	switch lc.To {
-	case conf.ToStdout:
-		Log.Out = os.Stdout
-	case conf.ToFile:
-		file, err := os.OpenFile("demo.log", os.O_CREATE|os.O_WRONLY, 0666)
-		if err == nil {
-			Log.Out = file
-		} else {
-			Log.Info("Failed to log to file, using default stderr")
-		}
-	}
-	switch lc.Format {
-	case conf.JSONFormat:
-		Log.Formatter = new(logrus.JSONFormatter)
-	}
-	Log.Info("Init log config complete!!")
-	return nil
 }
 
 func (s *service) waitSign(sign chan os.Signal) {

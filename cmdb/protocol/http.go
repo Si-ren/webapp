@@ -1,13 +1,15 @@
 package protocol
 
 import (
+	"cmdb/cmd"
 	"cmdb/conf"
 	"context"
 	"fmt"
-	"github.com/docker/docker/daemon/logger"
-	"github.com/julienschmidt/httprouter"
 	"net/http"
 	"time"
+
+	"github.com/julienschmidt/httprouter"
+	"github.com/sirupsen/logrus"
 )
 
 // NewHTTPService 构建函数
@@ -20,21 +22,21 @@ func NewHTTPService() *HTTPService {
 		WriteTimeout:      60 * time.Second,
 		IdleTimeout:       60 * time.Second,
 		MaxHeaderBytes:    1 << 20, // 1M
-		Addr:              conf.C().App.Addr(),
+		Addr:              conf.Configure().App.Addr(),
 		Handler:           cors.AllowAll().Handler(r),
 	}
 	return &HTTPService{
 		r:      r,
 		server: server,
-		l:      zap.L().Named("API"),
-		c:      conf.C(),
+		l:      cmd.Log,
+		c:      conf.Configure(),
 	}
 }
 
 // HTTPService http服务
 type HTTPService struct {
 	r      *httprouter.Router
-	l      logger.Logger
+	l      *logrus.Logger
 	c      *conf.Config
 	server *http.Server
 }
