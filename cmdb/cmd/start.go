@@ -3,19 +3,19 @@ package cmd
 import (
 	"cmdb/conf"
 	"cmdb/pkg/host"
+	"cmdb/protocol"
 	"errors"
 	"fmt"
+	"strings"
 
-	"cmdb/pkg/host/http"
-	"cmdb/pkg/host/impl"
-
-	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 
 	"os"
 	"os/signal"
 	"syscall"
 
+	_ "cmdb/pkg/host/http"
+	_ "cmdb/pkg/host/impl"
 	"github.com/spf13/cobra"
 )
 
@@ -44,50 +44,45 @@ var serviceCmd = &cobra.Command{
 			return err
 		}
 
-		// 初始化服务层 Ioc初始化
-		if err := impl.Service.Config(Log); err != nil {
-			return err
-		}
-
-		HostHandler := http.NewHostHandler(impl.Service, Log)
-		router := gin.Default()
-		HostHandler.RegistryApi(router)
-		router.Run()
+		//创建router
+		//router := gin.Default()
+		//pkg.InitConfigSvc()
+		//pkg.InitRouterSvc(router)
+		//router.Run(conf.Configure().App.Addr())
 
 		// 启动服务
 		ch := make(chan os.Signal, 1)
 		signal.Notify(ch, syscall.SIGTERM, syscall.SIGINT, syscall.SIGHUP, syscall.SIGQUIT)
 
-		// 初始化服务
-		//svr, err := newService(conf.Configure())
-		//if err != nil {
-		//	return err
-		//}
-		//
-		//// 等待信号处理
-		//go svr.waitSign(ch)
-		//// 启动服务
-		//if err := svr.start(); err != nil {
-		//	if !strings.Contains(err.Error(), "http: Server closed") {
-		//		return err
-		//	}
-		//}
+		//初始化服务
+		svr, err := newService()
+		if err != nil {
+			return err
+		}
+
+		// 等待信号处理
+		go svr.waitSign(ch)
+		// 启动服务
+		if err := svr.start(); err != nil {
+			if !strings.Contains(err.Error(), "http: Server closed") {
+				return err
+			}
+		}
 		return nil
 	},
 }
 
-//func newService(cnf *conf.Config) (*service, error) {
-//	http := protocol.NewHTTPService()
-//	svr := &service{
-//		http: http,
-//		log:  Log,
-//	}
-//
-//	return svr, nil
-//}
+func newService() (*service, error) {
+	http := protocol.NewHTTPService()
+	svr := &service{
+		http: http,
+		log:  conf.Log,
+	}
+
+	return svr, nil
+}
 
 var (
-	Log      *logrus.Logger          = logrus.New()
 	LogLevel map[string]logrus.Level = map[string]logrus.Level{
 		"INFO":  logrus.InfoLevel,
 		"DEBUG": logrus.DebugLevel,
@@ -98,29 +93,29 @@ var (
 	}
 )
 
-//type service struct {
-//	http *protocol.HTTPService
-//	log  *logrus.Logger
-//}
-//
-//func (s *service) start() error {
-//	return s.http.Start()
-//}
+type service struct {
+	http *protocol.HTTPService
+	log  *logrus.Logger
+}
 
-//func (s *service) waitSign(sign chan os.Signal) {
-//	for sg := range sign {
-//		switch v := sg.(type) {
-//		default:
-//			// 资源清理
-//			s.log.Infof("receive signal '%v', start graceful shutdown", v.String())
-//			if err := s.http.Stop(); err != nil {
-//				s.log.Errorf("graceful shutdown err: %s, force exit", err)
-//			}
-//			s.log.Infof("service stop complete")
-//			return
-//		}
-//	}
-//}
+func (s *service) start() error {
+	return s.http.Start()
+}
+
+func (s *service) waitSign(sign chan os.Signal) {
+	for sg := range sign {
+		switch v := sg.(type) {
+		default:
+			// 资源清理
+			s.log.Infof("receive signal '%v', start graceful shutdown", v.String())
+			if err := s.http.Stop(); err != nil {
+				s.log.Errorf("graceful shutdown err: %s, force exit", err)
+			}
+			s.log.Infof("service stop complete")
+			return
+		}
+	}
+}
 
 // config 为全局变量, 只需要load 即可全局可用户
 func loadGlobalConfig(configType string) error {
@@ -150,25 +145,25 @@ func loadGlobalConfig(configType string) error {
 func loadGlobalLogger() error {
 	lc := conf.Configure().Log
 	fmt.Println(LogLevel[lc.Level])
-	Log.SetLevel(LogLevel[lc.Level])
+	conf.Log.SetLevel(LogLevel[lc.Level])
 	fmt.Println("log level: %s", lc.Level)
 
 	switch lc.To {
 	case conf.ToStdout:
-		Log.Out = os.Stdout
+		conf.Log.Out = os.Stdout
 	case conf.ToFile:
 		file, err := os.OpenFile("demo.log", os.O_CREATE|os.O_WRONLY, 0666)
 		if err == nil {
-			Log.Out = file
+			conf.Log.Out = file
 		} else {
-			Log.Info("Failed to log to file, using default stderr")
+			conf.Log.Info("Failed to log to file, using default stderr")
 		}
 	}
 	switch lc.Format {
 	case conf.JSONFormat:
-		Log.Formatter = new(logrus.JSONFormatter)
+		conf.Log.Formatter = new(logrus.JSONFormatter)
 	}
-	Log.Info("Init log config complete!!")
+	conf.Log.Info("InitConfigSvc log config complete!!")
 	return nil
 }
 

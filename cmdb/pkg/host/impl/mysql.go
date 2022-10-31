@@ -2,6 +2,7 @@ package impl
 
 import (
 	"cmdb/conf"
+	"cmdb/pkg"
 	"cmdb/pkg/host"
 	"context"
 	"github.com/rs/xid"
@@ -37,9 +38,9 @@ const (
 )
 
 var (
-	// Service 服务实例
-	Service              = &service{}
-	_       host.Service = (*service)(nil)
+	// HostService 服务实例
+	HostService              = &service{}
+	_           host.Service = (*service)(nil)
 )
 
 type service struct {
@@ -47,22 +48,26 @@ type service struct {
 	log *logrus.Logger
 }
 
-func (s *service) Config(logger *logrus.Logger) error {
+func (s *service) Name() string {
+	return host.AppName
+}
+
+func (s *service) Config() error {
 	db, err := conf.Configure().MySQL.GetDB()
 	if err != nil {
 		return err
 	}
 
-	s.log = logger
+	s.log = conf.Log
 	s.db = db
 	return nil
 }
 
 func (s *service) CreateHost(ctx context.Context, h *host.Host) (
 	*host.Host, error) {
-	h.Id = xid.New().String()
-	h.ResourceId = h.Id
-
+	h.Base.InstanceId = xid.New().String()
+	h.ResourceId = h.Base.InstanceId
+	h.DescribeId = h.InstanceId
 	if err := s.create(ctx, h); err != nil {
 		return nil, err
 	}
@@ -100,4 +105,8 @@ func (s *service) DeleteHost(ctx context.Context, req *host.DeleteHostRequest) (
 	}
 
 	return ins, nil
+}
+
+func init() {
+	pkg.ImplRegister(HostService)
 }

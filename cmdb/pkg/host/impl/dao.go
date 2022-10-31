@@ -83,7 +83,10 @@ func (s *service) create(ctx context.Context, h *host.Host) error {
 		tx.Rollback()
 		return err
 	}
-
+	if err := tx.Create(h.Describe).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
 	if tx.Error != nil {
 		tx.Rollback()
 	}

@@ -1,7 +1,13 @@
 package conf
 
+import "github.com/sirupsen/logrus"
+
 // LogFormat 日志格式
 type LogFormat string
+
+var (
+	Log *logrus.Logger = logrus.New()
+)
 
 const (
 	// TextFormat 文本格式

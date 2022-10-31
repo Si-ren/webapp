@@ -11,6 +11,7 @@ import (
 // use a single instance of Validate, it caches struct info
 var (
 	validate = validator.New()
+	AppName  = "Host"
 )
 
 type Service interface {
