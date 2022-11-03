@@ -157,7 +157,7 @@ func (s *service) delete(ctx context.Context, req *host.DeleteHostRequest) error
 	return nil
 }
 
-func (s *service) query(ctx context.Context, req *host.QueryHostRequest) error {
+func (s *service) query(ctx context.Context, req *host.QueryHostRequest) (*host.HostSet, error) {
 	//var (
 	//	stmt *sql.Stmt
 	//	err  error
@@ -196,9 +196,39 @@ func (s *service) query(ctx context.Context, req *host.QueryHostRequest) error {
 	//
 	//return tx.Commit()
 
-	if err := s.db.Where("id>? limit ?", req.PageSize*req.PageNumber, req.PageSize).Find(&host.Base{}).Error; err != nil {
-		return err
-	}
+	// if err := s.db.Where("id>? limit ?", req.PageSize*req.PageNumber, req.PageSize).Find(&host.Base{}).Error; err != nil {
+	// 	return nil, err
+	// }
 
-	return nil
+	hSet := host.NewHostSet()
+	hSet.Items = make([]*host.Host, req.PageSize)
+	sliceNum := 0
+	rowsBase, err := s.db.Raw(queryBaseSQL, req.PageNumber*req.PageSize, req.PageSize).Rows()
+	if err != nil {
+		return nil, err
+	}
+	for rowsBase.Next() {
+		if err := rowsBase.Scan(hSet.Items[sliceNum].Base.BaseId); err != nil {
+			return nil, err
+		}
+	}
+	rowsDescribe, err := s.db.Raw(queryBaseSQL, req.PageNumber*req.PageSize, req.PageSize).Rows()
+	if err != nil {
+		return nil, err
+	}
+	for rowsDescribe.Next() {
+		if err := rowsBase.Scan(hSet.Items[sliceNum].Describe.CPU); err != nil {
+			return nil, err
+		}
+	}
+	rowsResource, err := s.db.Raw(queryBaseSQL, req.PageNumber*req.PageSize, req.PageSize).Rows()
+	if err != nil {
+		return nil, err
+	}
+	for rowsResource.Next() {
+		if err := rowsBase.Scan(hSet.Items[sliceNum].Resource.Category); err != nil {
+			return nil, err
+		}
+	}
+	return hSet, nil
 }

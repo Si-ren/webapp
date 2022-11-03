@@ -6,6 +6,7 @@ import (
 	"cmdb/pkg/host"
 	"cmdb/pkg/host/impl"
 	"fmt"
+
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 )
@@ -42,6 +43,7 @@ func (h *handler) Configure() error {
 
 func (h *handler) Registry(r gin.IRouter) {
 	r.POST("/hosts", h.CreateHost)
+	r.GET("/hosts", h.QueryHost)
 
 }
 

@@ -5,6 +5,7 @@ import (
 	"cmdb/pkg"
 	"cmdb/pkg/host"
 	"context"
+
 	"github.com/rs/xid"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
@@ -33,6 +34,9 @@ const (
 	WHERE resource_id = ?`
 
 	queryHostSQL      = `SELECT * FROM resource as r LEFT JOIN host h ON r.id=h.resource_id`
+	queryResourceSQL  = `SELECT * FROM resource where id >= ? limit ?;`
+	queryDescribeSQL  = `SELECT * FROM describe where id >= ? limit ?;`
+	queryBaseSQL      = `SELECT * FROM base where id >= ? limit ?;`
 	deleteHostSQL     = `DELETE FROM host WHERE resource_id = ?;`
 	deleteResourceSQL = `DELETE FROM resource WHERE id = ?;`
 )
@@ -77,8 +81,12 @@ func (s *service) CreateHost(ctx context.Context, h *host.Host) (
 
 func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
 	*host.HostSet, error) {
-
-	return nil, nil
+	hSet := host.NewHostSet()
+	hSet, err := s.query(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return hSet, nil
 }
 
 func (s *service) UpdateHost(ctx context.Context, req *host.UpdateHostRequest) (
