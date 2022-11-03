@@ -93,7 +93,7 @@ func (m *mySQL) GetDB() (*gorm.DB, error) {
 
 func (m *mySQL) getDBConn() (*gorm.DB, error) {
 	var err error
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&multiStatements=true", m.UserName, m.Password, m.Host, m.Port, m.Database)
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&multiStatements=true&parseTime=true", m.UserName, m.Password, m.Host, m.Port, m.Database)
 	db, err := gorm.Open(mysql.New(mysql.Config{
 		DSN:               dsn, // DSN data source name
 		DefaultStringSize: 256}), &gorm.Config{})

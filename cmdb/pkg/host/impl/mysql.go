@@ -6,7 +6,6 @@ import (
 	"cmdb/pkg/host"
 	"context"
 
-	"github.com/rs/xid"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
@@ -34,9 +33,9 @@ const (
 	WHERE resource_id = ?`
 
 	queryHostSQL      = `SELECT * FROM resource as r LEFT JOIN host h ON r.id=h.resource_id`
-	queryResourceSQL  = `SELECT * FROM resource where id >= ? limit ?;`
-	queryDescribeSQL  = `SELECT * FROM describe where id >= ? limit ?;`
-	queryBaseSQL      = `SELECT * FROM base where id >= ? limit ?;`
+	queryResourceSQL  = `SELECT * FROM resource where resource_id >= ? limit ?;`
+	queryDescribeSQL  = "SELECT * FROM `describe` where  describe_id >= ? limit ?;"
+	queryBaseSQL      = `SELECT base_id,instance_id,sync_at,vendor,region,zone,create_at,resource_hash,describe_hash FROM base where base_id >= ? limit ?;`
 	deleteHostSQL     = `DELETE FROM host WHERE resource_id = ?;`
 	deleteResourceSQL = `DELETE FROM resource WHERE id = ?;`
 )
@@ -69,7 +68,7 @@ func (s *service) Config() error {
 
 func (s *service) CreateHost(ctx context.Context, h *host.Host) (
 	*host.Host, error) {
-	h.Base.InstanceId = xid.New().String()
+	//h.Base.InstanceId = xid.New().String()
 	h.ResourceId = h.Base.InstanceId
 	h.DescribeId = h.InstanceId
 	if err := s.create(ctx, h); err != nil {
@@ -81,7 +80,7 @@ func (s *service) CreateHost(ctx context.Context, h *host.Host) (
 
 func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
 	*host.HostSet, error) {
-	hSet := host.NewHostSet()
+
 	hSet, err := s.query(ctx, req)
 	if err != nil {
 		return nil, err

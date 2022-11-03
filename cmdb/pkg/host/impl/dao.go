@@ -201,34 +201,73 @@ func (s *service) query(ctx context.Context, req *host.QueryHostRequest) (*host.
 	// }
 
 	hSet := host.NewHostSet()
-	hSet.Items = make([]*host.Host, req.PageSize)
+	hSet.Items = make([]*host.Host, 0)
 	sliceNum := 0
 	rowsBase, err := s.db.Raw(queryBaseSQL, req.PageNumber*req.PageSize, req.PageSize).Rows()
+	defer rowsBase.Close()
 	if err != nil {
 		return nil, err
 	}
 	for rowsBase.Next() {
-		if err := rowsBase.Scan(hSet.Items[sliceNum].Base.BaseId); err != nil {
-			return nil, err
-		}
+		hb := host.NewHost()
+		rowsBase.Scan(
+			&hb.BaseId,
+			&hb.InstanceId,
+			&hb.SyncAt,
+			&hb.Vendor,
+			&hb.Region,
+			&hb.Zone,
+			&hb.CreateAt,
+			&hb.ResourceHash,
+			&hb.DescribeHash)
+
+		hSet.Add(hb)
+		sliceNum++
 	}
-	rowsDescribe, err := s.db.Raw(queryBaseSQL, req.PageNumber*req.PageSize, req.PageSize).Rows()
+	sliceNum = 0
+	rowsDescribe, err := s.db.Raw(queryDescribeSQL, req.PageNumber*req.PageSize, req.PageSize).Rows()
+	defer rowsDescribe.Close()
 	if err != nil {
 		return nil, err
 	}
 	for rowsDescribe.Next() {
-		if err := rowsBase.Scan(hSet.Items[sliceNum].Describe.CPU); err != nil {
-			return nil, err
-		}
+		rowsBase.Scan(hSet.Items[sliceNum].Describe.DescribeId,
+			&hSet.Items[sliceNum].Describe.CPU,
+			&hSet.Items[sliceNum].Describe.Memory,
+			&hSet.Items[sliceNum].Describe.GPUAmount,
+			&hSet.Items[sliceNum].Describe.GPUSpec,
+			&hSet.Items[sliceNum].Describe.OSType,
+			&hSet.Items[sliceNum].Describe.OSName,
+			&hSet.Items[sliceNum].Describe.SerialNumber,
+			&hSet.Items[sliceNum].Describe.ImageID,
+			&hSet.Items[sliceNum].Describe.InternetMaxBandwidthIn,
+			&hSet.Items[sliceNum].InternetMaxBandwidthOut,
+			&hSet.Items[sliceNum].KeyPairName,
+			&hSet.Items[sliceNum].SecurityGroups)
+		sliceNum++
 	}
-	rowsResource, err := s.db.Raw(queryBaseSQL, req.PageNumber*req.PageSize, req.PageSize).Rows()
+	sliceNum = 0
+	rowsResource, err := s.db.Raw(queryResourceSQL, req.PageNumber*req.PageSize, req.PageSize).Rows()
+	defer rowsResource.Close()
 	if err != nil {
 		return nil, err
 	}
 	for rowsResource.Next() {
-		if err := rowsBase.Scan(hSet.Items[sliceNum].Resource.Category); err != nil {
-			return nil, err
-		}
+		rowsBase.Scan(hSet.Items[sliceNum].Resource.ResourceId,
+			&hSet.Items[sliceNum].Resource.ExpireAt,
+			&hSet.Items[sliceNum].Resource.Category,
+			&hSet.Items[sliceNum].Resource.Type,
+			&hSet.Items[sliceNum].Resource.Name,
+			&hSet.Items[sliceNum].Resource.Description,
+			&hSet.Items[sliceNum].Resource.Status,
+			&hSet.Items[sliceNum].Resource.Tags,
+			&hSet.Items[sliceNum].Resource.UpdateAt,
+			&hSet.Items[sliceNum].Resource.SyncAccount,
+			&hSet.Items[sliceNum].Resource.PublicIP,
+			&hSet.Items[sliceNum].Resource.PrivateIP,
+			&hSet.Items[sliceNum].Resource.PayType)
+		sliceNum++
 	}
+	hSet.Total = sliceNum
 	return hSet, nil
 }
