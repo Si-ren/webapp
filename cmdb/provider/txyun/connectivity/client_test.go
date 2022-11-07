@@ -1,12 +1,11 @@
 package connectivity_test
 
 import (
+	"cmdb/provider/txyun/connectivity"
 	"os"
 	"testing"
 
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/regions"
-
-	"gitee.com/infraboard/go-course/day14/demo/api/provider/txyun/connectivity"
 )
 
 func TestClient(t *testing.T) {
