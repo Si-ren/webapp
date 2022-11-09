@@ -3,6 +3,8 @@ syntax = "proto3";
 package resource.v1;
 option go_package="cmdb/pkg/resource/resource.proto;resource";
 
+// -I --proto_path: proto的目录位置，--go_out: 产生的go文件地址，--go_opt: protoc的参数配置
+//protoc --proto_path=. --proto_path=..\..\common\pb\page\v1  --go_out .\api\v1  --go_opt paths=source_relative  .\resource.proto
 import "page.proto";
 
 service Service {

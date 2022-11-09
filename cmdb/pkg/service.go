@@ -4,7 +4,9 @@ import (
 	"cmdb/conf"
 	"cmdb/pkg/host"
 	"fmt"
+
 	"github.com/gin-gonic/gin"
+	"google.golang.org/grpc"
 )
 
 var (
@@ -13,6 +15,7 @@ var (
 	//让这俩管理所有service的Config和注册路由
 	implSvcs = map[string]ImplService{}
 	ginSvcs  = map[string]GinService{}
+	grpcSvcs = map[string]GrpcService{}
 )
 
 type ImplService interface {
@@ -67,4 +70,35 @@ func InitRouterSvc(r gin.IRouter) {
 		v.Registry(r)
 		conf.Log.Infof("%s router handler  register router  complete", k)
 	}
+}
+
+type GrpcService interface {
+	Registry(g *grpc.Server)
+	Config() error
+	Name() string
+}
+
+func GrpcRegister(svc GrpcService) {
+	_, ok := grpcSvcs[svc.Name()]
+	if !ok {
+		panic(fmt.Sprintf("GrpcService %s has registered", svc.Name()))
+	}
+	grpcSvcs[svc.Name()] = svc
+}
+
+func InitGrpcService(server *grpc.Server) error {
+	for name, svc := range grpcSvcs {
+		if err := svc.Config(); err != nil {
+			return fmt.Errorf("init grpc service %s err: %s", name, err.Error())
+		}
+		svc.Registry(server)
+	}
+	return nil
+}
+
+func GetGrpcSvcs() (names []string) {
+	for k := range grpcSvcs {
+		names = append(names, k)
+	}
+	return names
 }
