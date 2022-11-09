@@ -286,13 +286,13 @@ type TagSelector struct {
 
 	// 匹配的key, 支持LIKE匹配
 	// @gotags: json:"key"
-	Key string `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
+	Key string `protobuf:"bytes,1,opt,name=key,proto3" json:"key"`
 	// 匹配符
 	// @gotags: json:"operator"
-	Operator string `protobuf:"bytes,2,opt,name=operator,proto3" json:"operator,omitempty"`
+	Operator string `protobuf:"bytes,2,opt,name=operator,proto3" json:"operator"`
 	// 匹配的值, 支持多个值匹配
 	// @gotags: json:"values"
-	Values []string `protobuf:"bytes,3,rep,name=values,proto3" json:"values,omitempty"`
+	Values []string `protobuf:"bytes,3,rep,name=values,proto3" json:"values"`
 }
 
 func (x *TagSelector) Reset() {
@@ -355,44 +355,44 @@ type SearchRequest struct {
 
 	// 分页参数
 	// @gotags: json:"page"
-	Page *v1.PageRequest `protobuf:"bytes,1,opt,name=page,proto3" json:"page,omitempty"`
+	Page *v1.PageRequest `protobuf:"bytes,1,opt,name=page,proto3" json:"page"`
 	// 资源所属域
 	// @gotags: json:"domain"
-	Domain string `protobuf:"bytes,2,opt,name=domain,proto3" json:"domain,omitempty"`
+	Domain string `protobuf:"bytes,2,opt,name=domain,proto3" json:"domain"`
 	// 资源所属空间
 	// @gotags: json:"namespace"
-	Namespace string `protobuf:"bytes,3,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Namespace string `protobuf:"bytes,3,opt,name=namespace,proto3" json:"namespace"`
 	// 资源所属环境
 	// @gotags: json:"env"
-	Env string `protobuf:"bytes,4,opt,name=env,proto3" json:"env,omitempty"`
+	Env string `protobuf:"bytes,4,opt,name=env,proto3" json:"env"`
 	// 使用方式
 	// @gotags: json:"usage_mode"
-	UsageMode *UsageMode `protobuf:"varint,5,opt,name=usage_mode,json=usageMode,proto3,enum=resource.v1.UsageMode,oneof" json:"usage_mode,omitempty"`
+	UsageMode *UsageMode `protobuf:"varint,5,opt,name=usage_mode,json=usageMode,proto3,enum=resource.v1.UsageMode,oneof" json:"usage_mode"`
 	// 厂商
 	// @gotags: json:"vendor"
-	Vendor *Vendor `protobuf:"varint,6,opt,name=vendor,proto3,enum=resource.v1.Vendor,oneof" json:"vendor,omitempty"`
+	Vendor *Vendor `protobuf:"varint,6,opt,name=vendor,proto3,enum=resource.v1.Vendor,oneof" json:"vendor"`
 	// 同步的账号
 	// @gotags: json:"sync_account"
-	SyncAccount string `protobuf:"bytes,7,opt,name=sync_account,json=syncAccount,proto3" json:"sync_account,omitempty"`
+	SyncAccount string `protobuf:"bytes,7,opt,name=sync_account,json=syncAccount,proto3" json:"sync_account"`
 	// 资源类型, optional protoc编译过后--> 指针类型, 意思允许为空指针
 	// @gotags: json:"type"
-	Type *Type `protobuf:"varint,8,opt,name=type,proto3,enum=resource.v1.Type,oneof" json:"type,omitempty"`
+	Type *Type `protobuf:"varint,8,opt,name=type,proto3,enum=resource.v1.Type,oneof" json:"type"`
 	// 服务商中的状态
 	// @gotags: json:"status"
-	Status string `protobuf:"bytes,9,opt,name=status,proto3" json:"status,omitempty"`
+	Status string `protobuf:"bytes,9,opt,name=status,proto3" json:"status"`
 	// 资源标签
 	// @gotags: json:"tags"
-	Tags []*TagSelector `protobuf:"bytes,10,rep,name=tags,proto3" json:"tags,omitempty"`
+	Tags []*TagSelector `protobuf:"bytes,10,rep,name=tags,proto3" json:"tags"`
 	// 是否返回资源的标签, 如果标签很多，你有不想要, 可以控制返回该资源的标签？
 	// 提升性能,  避免以下不必要数据的传输
 	// @gotags: json:"with_tags"
-	WithTags bool `protobuf:"varint,11,opt,name=with_tags,json=withTags,proto3" json:"with_tags,omitempty"`
+	WithTags bool `protobuf:"varint,11,opt,name=with_tags,json=withTags,proto3" json:"with_tags"`
 	// 关键字参数
 	// @gotags: json:"keywords"
-	Keywords string `protobuf:"bytes,14,opt,name=keywords,proto3" json:"keywords,omitempty"`
+	Keywords string `protobuf:"bytes,14,opt,name=keywords,proto3" json:"keywords"`
 	// 是否精确匹配, 比如你要匹配IP, 10,10.1.1   10.10.1.1xx
 	// @gotags: json:"exact_match"
-	ExactMatch bool `protobuf:"varint,15,opt,name=exact_match,json=exactMatch,proto3" json:"exact_match,omitempty"`
+	ExactMatch bool `protobuf:"varint,15,opt,name=exact_match,json=exactMatch,proto3" json:"exact_match"`
 }
 
 func (x *SearchRequest) Reset() {
@@ -525,7 +525,7 @@ type QueryTagRequest struct {
 
 	// 资源id
 	// @gotags: json:"resource_ids"
-	ResourceIds []string `protobuf:"bytes,1,rep,name=resource_ids,json=resourceIds,proto3" json:"resource_ids,omitempty"`
+	ResourceIds []string `protobuf:"bytes,1,rep,name=resource_ids,json=resourceIds,proto3" json:"resource_ids"`
 }
 
 func (x *QueryTagRequest) Reset() {
@@ -574,13 +574,13 @@ type UpdateTagRequest struct {
 
 	// 资源id, 你要修改那个资源的标签
 	// @gotags: json:"id" validate:"required"
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id" validate:"required"`
 	// 资源id
 	// @gotags: json:"action"
-	Action UpdateAction `protobuf:"varint,2,opt,name=action,proto3,enum=resource.v1.UpdateAction" json:"action,omitempty"`
+	Action UpdateAction `protobuf:"varint,2,opt,name=action,proto3,enum=resource.v1.UpdateAction" json:"action"`
 	// 需要修改的资源标签
 	// @gotags: json:"tags" validate:"required"
-	Tags []*Tag `protobuf:"bytes,3,rep,name=tags,proto3" json:"tags,omitempty"`
+	Tags []*Tag `protobuf:"bytes,3,rep,name=tags,proto3" json:"tags" validate:"required"`
 }
 
 func (x *UpdateTagRequest) Reset() {
@@ -642,9 +642,9 @@ type ResourceSet struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: json:"total"
-	Total int64 `protobuf:"varint,1,opt,name=total,proto3" json:"total,omitempty"`
+	Total int64 `protobuf:"varint,1,opt,name=total,proto3" json:"total"`
 	// @gotags: json:"items"
-	Items []*Resource `protobuf:"bytes,2,rep,name=items,proto3" json:"items,omitempty"`
+	Items []*Resource `protobuf:"bytes,2,rep,name=items,proto3" json:"items"`
 }
 
 func (x *ResourceSet) Reset() {
@@ -701,10 +701,10 @@ type Resource struct {
 
 	// 资源元数据信息, 固有属性, 比如云商
 	// @gotags: json:"base"
-	Base *Base `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
+	Base *Base `protobuf:"bytes,1,opt,name=base,proto3" json:"base"`
 	// 资源信息, 通用信息, 允许变化, 比如IP
 	// @gotags: json:"information"
-	Information *Information `protobuf:"bytes,2,opt,name=information,proto3" json:"information,omitempty"`
+	Information *Information `protobuf:"bytes,2,opt,name=information,proto3" json:"information"`
 }
 
 func (x *Resource) Reset() {
@@ -761,10 +761,10 @@ type SharedPolicy struct {
 
 	// 分享的维度, 多个应用，多个使用者
 	// @gotags: json:"tag_key"
-	TagKey string `protobuf:"bytes,1,opt,name=tag_key,json=tagKey,proto3" json:"tag_key,omitempty"`
+	TagKey string `protobuf:"bytes,1,opt,name=tag_key,json=tagKey,proto3" json:"tag_key"`
 	// 分享给哪些值, app1,app2,app3,   user1,user2,user3
 	// @gotags: json:"tag_values"
-	TagValues []string `protobuf:"bytes,2,rep,name=tag_values,json=tagValues,proto3" json:"tag_values,omitempty"`
+	TagValues []string `protobuf:"bytes,2,rep,name=tag_values,json=tagValues,proto3" json:"tag_values"`
 }
 
 func (x *SharedPolicy) Reset() {
@@ -819,56 +819,56 @@ type Base struct {
 	unknownFields protoimpl.UnknownFields
 
 	// 全局唯一Id, 直接使用个云商自己的Id, 云商内部唯一
-	// @gotags: json:"id" validate:"required";gorm:"primaryKey;comment:全局唯一Id;not null"
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	// @gotags: json:"id";validate:"required";gorm:"primaryKey;comment:全局唯一Id;not null"
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id" validate:"required" gorm:"primaryKey;comment:全局唯一Id;not null"`
 	// 同步时间, 什么时候被录入该系统
-	// @gotags: json:"sync_at";gorm:"comment:同步时间"
-	SyncAt int64 `protobuf:"varint,2,opt,name=sync_at,json=syncAt,proto3" json:"sync_at,omitempty"`
+	// @gotags: json:"sync_at" @gotags: gorm:"comment:同步时间"
+	SyncAt int64 `protobuf:"varint,2,opt,name=sync_at,json=syncAt,proto3" json:"sync_at" gorm:"comment:同步时间"`
 	// 用于同步的凭证ID, 需要凭证才能读取或操作云商的资源
 	// @gotags: json:"secret_id" gorm:"comment:用于同步的凭证ID"
-	SecretId string `protobuf:"bytes,3,opt,name=secret_id,json=secretId,proto3" json:"secret_id,omitempty"`
+	SecretId string `protobuf:"bytes,3,opt,name=secret_id,json=secretId,proto3" json:"secret_id" gorm:"comment:用于同步的凭证ID"`
 	// 厂商
 	// @gotags: json:"vendor" gorm:"comment:厂商"
-	Vendor Vendor `protobuf:"varint,4,opt,name=vendor,proto3,enum=resource.v1.Vendor" json:"vendor,omitempty"`
+	Vendor Vendor `protobuf:"varint,4,opt,name=vendor,proto3,enum=resource.v1.Vendor" json:"vendor" gorm:"comment:厂商"`
 	// 资源类型
 	// @gotags: json:"resource_type" gorm:"comment:资源类型"
-	ResourceType Type `protobuf:"varint,5,opt,name=resource_type,json=resourceType,proto3,enum=resource.v1.Type" json:"resource_type,omitempty"`
+	ResourceType Type `protobuf:"varint,5,opt,name=resource_type,json=resourceType,proto3,enum=resource.v1.Type" json:"resource_type" gorm:"comment:资源类型"`
 	// 地域
 	// @gotags: json:"region" gorm:"comment:地域"
-	Region string `protobuf:"bytes,6,opt,name=region,proto3" json:"region,omitempty"`
+	Region string `protobuf:"bytes,6,opt,name=region,proto3" json:"region" gorm:"comment:地域"`
 	// 区域
 	// @gotags: json:"zone" gorm:"comment:区域"
-	Zone string `protobuf:"bytes,7,opt,name=zone,proto3" json:"zone,omitempty"`
+	Zone string `protobuf:"bytes,7,opt,name=zone,proto3" json:"zone" gorm:"comment:区域"`
 	// 创建时间, 生产时间
 	// @gotags: json:"create_at" gorm:"comment:创建时间"
-	CreateAt int64 `protobuf:"varint,8,opt,name=create_at,json=createAt,proto3" json:"create_at,omitempty"`
+	CreateAt int64 `protobuf:"varint,8,opt,name=create_at,json=createAt,proto3" json:"create_at" gorm:"comment:创建时间"`
 	// 基础数据Hash, 通用属性Hash, 有比对是否需要被更新, 提升效率
 	// @gotags: json:"resource_hash"gorm:"comment:基础数据Hash"
-	ResourceHash string `protobuf:"bytes,10,opt,name=resource_hash,json=resourceHash,proto3" json:"resource_hash,omitempty"`
+	ResourceHash string `protobuf:"bytes,10,opt,name=resource_hash,json=resourceHash,proto3" json:"resource_hash" gorm:"comment:基础数据Hash"`
 	// 描述数据Hash, 资源特有属性, 就是其他的模型表, 比如主机, GPU
 	// @gotags: json:"describe_hash" gorm:"comment:描述数据Hash"
-	DescribeHash string `protobuf:"bytes,11,opt,name=describe_hash,json=describeHash,proto3" json:"describe_hash,omitempty"`
+	DescribeHash string `protobuf:"bytes,11,opt,name=describe_hash,json=describeHash,proto3" json:"describe_hash" gorm:"comment:描述数据Hash"`
 	// Resource信息是否有变化
 	// @gotags: json:"resource_hash_changed,omitempty" gorm:"comment:Resource信息是否有变化"
-	ResourceHashChanged bool `protobuf:"varint,12,opt,name=resource_hash_changed,json=resourceHashChanged,proto3" json:"resource_hash_changed,omitempty"`
+	ResourceHashChanged bool `protobuf:"varint,12,opt,name=resource_hash_changed,json=resourceHashChanged,proto3" json:"resource_hash_changed,omitempty" gorm:"comment:Resource信息是否有变化"`
 	// Describe信息释放有变化
 	// @gotags: json:"describe_hash_changed,omitempty" gorm:"comment:Describe信息释放有变化"
-	DescribeHashChanged bool `protobuf:"varint,13,opt,name=describe_hash_changed,json=describeHashChanged,proto3" json:"describe_hash_changed,omitempty"`
+	DescribeHashChanged bool `protobuf:"varint,13,opt,name=describe_hash_changed,json=describeHashChanged,proto3" json:"describe_hash_changed,omitempty" gorm:"comment:Describe信息释放有变化"`
 	// 资源所属空间, 所欲那个项目
 	// @gotags: json:"namespace" gorm:"comment:资源所属项目"
-	Namespace string `protobuf:"bytes,14,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Namespace string `protobuf:"bytes,14,opt,name=namespace,proto3" json:"namespace" gorm:"comment:资源所属项目"`
 	// 资源所属环境
 	// @gotags: json:"env" gorm:"comment:资源所属环境"
-	Env string `protobuf:"bytes,15,opt,name=env,proto3" json:"env,omitempty"`
+	Env string `protobuf:"bytes,15,opt,name=env,proto3" json:"env" gorm:"comment:资源所属环境"`
 	// 使用方式(可选)
 	// @gotags: json:"usage_mode" gorm:"comment:使用方式"
-	UsageMode UsageMode `protobuf:"varint,16,opt,name=usage_mode,json=usageMode,proto3,enum=resource.v1.UsageMode" json:"usage_mode,omitempty"`
+	UsageMode UsageMode `protobuf:"varint,16,opt,name=usage_mode,json=usageMode,proto3,enum=resource.v1.UsageMode" json:"usage_mode" gorm:"comment:使用方式"`
 	// 共享策略, 当一个资源被多个应用共享时, 可以指定允许的应用
 	// @gotags: json:"shared_policy" gorm:"comment:共享策略"
-	SharedPolicy *SharedPolicy `protobuf:"bytes,17,opt,name=shared_policy,json=sharedPolicy,proto3" json:"shared_policy,omitempty"`
+	SharedPolicy *SharedPolicy `protobuf:"bytes,17,opt,name=shared_policy,json=sharedPolicy,proto3" json:"shared_policy" gorm:"comment:共享策略"`
 	// 资源所属域, 一个组织或者一个公司, 做多租户模型
 	// @gotags: json:"domain" gorm:"comment:资源所属域"
-	Domain string `protobuf:"bytes,18,opt,name=domain,proto3" json:"domain,omitempty"`
+	Domain string `protobuf:"bytes,18,opt,name=domain,proto3" json:"domain" gorm:"comment:资源所属域"`
 }
 
 func (x *Base) Reset() {
@@ -1030,40 +1030,40 @@ type Information struct {
 
 	// 过期时间
 	// @gotags: json:"expire_at" gorm:"comment:过期时间"
-	ExpireAt int64 `protobuf:"varint,1,opt,name=expire_at,json=expireAt,proto3" json:"expire_at,omitempty"`
+	ExpireAt int64 `protobuf:"varint,1,opt,name=expire_at,json=expireAt,proto3" json:"expire_at" gorm:"comment:过期时间"`
 	// 种类, 计算型, 内存型
 	// @gotags: json:"category" gorm:"comment:种类"
-	Category string `protobuf:"bytes,2,opt,name=category,proto3" json:"category,omitempty"`
+	Category string `protobuf:"bytes,2,opt,name=category,proto3" json:"category" gorm:"comment:种类"`
 	// 规格, small(1u1g), 根据云商的概念
 	// @gotags: json:"type" gorm:"comment:规格"
-	Type string `protobuf:"bytes,3,opt,name=type,proto3" json:"type,omitempty"`
+	Type string `protobuf:"bytes,3,opt,name=type,proto3" json:"type" gorm:"comment:规格"`
 	// 资源名称
 	// @gotags: json:"name" gorm:"comment:资源名称"
-	Name string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+	Name string `protobuf:"bytes,4,opt,name=name,proto3" json:"name" gorm:"comment:资源名称"`
 	// 资源描述
 	// @gotags: json:"description" gorm:"comment:资源描述"
-	Description string `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
+	Description string `protobuf:"bytes,5,opt,name=description,proto3" json:"description" gorm:"comment:资源描述"`
 	// 服务商中的状态, 需要统一多个云商的状态
 	// @gotags: json:"status" gorm:"comment:服务商中的状态"
-	Status string `protobuf:"bytes,6,opt,name=status,proto3" json:"status,omitempty"`
+	Status string `protobuf:"bytes,6,opt,name=status,proto3" json:"status" gorm:"comment:服务商中的状态"`
 	// 资源标签, key=value 一个表情
 	// @gotags: json:"tags" gorm:"embedded;comment:资源标签"
-	Tags []*Tag `protobuf:"bytes,7,rep,name=tags,proto3" json:"tags,omitempty"`
+	Tags []*Tag `protobuf:"bytes,7,rep,name=tags,proto3" json:"tags" gorm:"embedded;comment:资源标签"`
 	// 更新时间
 	// @gotags: json:"update_at" gorm:"comment:更新时间"
-	UpdateAt int64 `protobuf:"varint,8,opt,name=update_at,json=updateAt,proto3" json:"update_at,omitempty"`
+	UpdateAt int64 `protobuf:"varint,8,opt,name=update_at,json=updateAt,proto3" json:"update_at" gorm:"comment:更新时间"`
 	// 资源所属的账号
 	// @gotags: json:"sync_account" gorm:"comment:资源所属的账号"
-	SyncAccount string `protobuf:"bytes,9,opt,name=sync_account,json=syncAccount,proto3" json:"sync_account,omitempty"`
+	SyncAccount string `protobuf:"bytes,9,opt,name=sync_account,json=syncAccount,proto3" json:"sync_account" gorm:"comment:资源所属的账号"`
 	// 公网IP, 或者域名
 	// @gotags: json:"public_ip" gorm:"comment:公网IP"
-	PublicIp []string `protobuf:"bytes,10,rep,name=public_ip,json=publicIp,proto3" json:"public_ip,omitempty"`
+	PublicIp []string `protobuf:"bytes,10,rep,name=public_ip,json=publicIp,proto3" json:"public_ip" gorm:"comment:公网IP"`
 	// 内网IP, 或者域名
 	// @gotags: json:"private_ip" gorm:"comment:内网IP"
-	PrivateIp []string `protobuf:"bytes,11,rep,name=private_ip,json=privateIp,proto3" json:"private_ip,omitempty"`
+	PrivateIp []string `protobuf:"bytes,11,rep,name=private_ip,json=privateIp,proto3" json:"private_ip" gorm:"comment:内网IP"`
 	// 实例付费方式, 按量, 包年包月, 买断(自己针对IDC)
 	// @gotags: json:"pay_type" gorm:"comment:实例付费方式"
-	PayType string `protobuf:"bytes,12,opt,name=pay_type,json=payType,proto3" json:"pay_type,omitempty"`
+	PayType string `protobuf:"bytes,12,opt,name=pay_type,json=payType,proto3" json:"pay_type" gorm:"comment:实例付费方式"`
 }
 
 func (x *Information) Reset() {
@@ -1188,9 +1188,9 @@ type TagSet struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @gotags: json:"total"
-	Total int64 `protobuf:"varint,1,opt,name=total,proto3" json:"total,omitempty"`
+	Total int64 `protobuf:"varint,1,opt,name=total,proto3" json:"total"`
 	// @gotags: json:"items"
-	Items []*Tag `protobuf:"bytes,2,rep,name=items,proto3" json:"items,omitempty"`
+	Items []*Tag `protobuf:"bytes,2,rep,name=items,proto3" json:"items"`
 }
 
 func (x *TagSet) Reset() {
@@ -1246,34 +1246,34 @@ type Tag struct {
 
 	// 标签属于的资源, 通过resource_id来进行关联, 根据数据库设计有关系
 	// @gotags: json:"resource_id"   gorm:"comment:标签属于的资源"
-	ResourceId string `protobuf:"bytes,1,opt,name=resource_id,json=resourceId,proto3" json:"resource_id,omitempty"`
+	ResourceId string `protobuf:"bytes,1,opt,name=resource_id,json=resourceId,proto3" json:"resource_id" gorm:"comment:标签属于的资源"`
 	// 标签的类型
 	// @gotags: json:"type" gorm:"comment:标签的类型"
-	Type TagType `protobuf:"varint,2,opt,name=type,proto3,enum=resource.v1.TagType" json:"type,omitempty"`
+	Type TagType `protobuf:"varint,2,opt,name=type,proto3,enum=resource.v1.TagType" json:"type" gorm:"comment:标签的类型"`
 	// 标签的Key
 	// @gotags: json:"key" validate:"lte=255,required" gorm:"comment:标签的Key"
-	Key string `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty"`
+	Key string `protobuf:"bytes,3,opt,name=key,proto3" json:"key" validate:"lte=255,required" gorm:"comment:标签的Key"`
 	// 标签的值, 可读性不好, appid=0xxx0111
 	// @gotags: json:"value" validate:"lte=255,required" gorm:"comment:标签的值"
-	Value string `protobuf:"bytes,4,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,4,opt,name=value,proto3" json:"value" validate:"lte=255,required" gorm:"comment:标签的值"`
 	// 标签的值的描述, 通常用于展示, 财务系统a
 	// @gotags: json:"describe" gorm:"comment:标签的值的描述"
-	Describe string `protobuf:"bytes,5,opt,name=describe,proto3" json:"describe,omitempty"`
+	Describe string `protobuf:"bytes,5,opt,name=describe,proto3" json:"describe" gorm:"comment:标签的值的描述"`
 	// 标签权重, 针对同一个key, 多个value场景, 默认值1
 	// 有一个资源A， 费用100, 被多个业务方共同使用, 出业务成本, 面临这个成本如何分摊的问题?
 	// 为了让分摊更加灵活, 添加标签的权重, 更加权重的值做具体分摊比例计算, 比如 a:1(1/4), b:2(2/4), c:1(1/4)
 	// 默认公平分摊, 默认就是1, 更加自由使用量俩进行分摊, 外部系统(监控系统) 通过使用计算出权重, 设置过来
 	// @gotags: json:"weight" gorm:"comment:标签权重"
-	Weight int64 `protobuf:"varint,6,opt,name=weight,proto3" json:"weight,omitempty"`
+	Weight int64 `protobuf:"varint,6,opt,name=weight,proto3" json:"weight" gorm:"comment:标签权重"`
 	// 标签是否纳入成本统计, 比如监控标签就不需要纳入到成本统计
 	// @gotags: json:"is_cost" gorm:"comment:标签是否纳入成本统计"
-	IsCost bool `protobuf:"varint,7,opt,name=is_cost,json=isCost,proto3" json:"is_cost,omitempty"`
+	IsCost bool `protobuf:"varint,7,opt,name=is_cost,json=isCost,proto3" json:"is_cost" gorm:"comment:标签是否纳入成本统计"`
 	// 标签是否隐藏, 用于控制是否在前端展示
 	// @gotags: json:"hidden" gorm:"comment:标签是否隐藏"
-	Hidden bool `protobuf:"varint,8,opt,name=hidden,proto3" json:"hidden,omitempty"`
+	Hidden bool `protobuf:"varint,8,opt,name=hidden,proto3" json:"hidden" gorm:"comment:标签是否隐藏"`
 	// 标签meta信息, 比如前端需要设置标签的颜色
 	// @gotags: json:"meta" gorm:"comment:标签meta信息"
-	Meta map[string]string `protobuf:"bytes,15,rep,name=meta,proto3" json:"meta,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Meta map[string]string `protobuf:"bytes,15,rep,name=meta,proto3" json:"meta" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3" gorm:"comment:标签meta信息"`
 }
 
 func (x *Tag) Reset() {

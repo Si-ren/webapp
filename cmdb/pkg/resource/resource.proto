@@ -5,6 +5,8 @@ option go_package="cmdb/pkg/resource/resource.proto;resource";
 
 // -I --proto_path: proto的目录位置，--go_out: 产生的go文件地址，--go_opt: protoc的参数配置
 //protoc --proto_path=. --proto_path=..\..\common\pb\page\v1  --go_out .\api\v1  --go_opt paths=source_relative  .\resource.proto
+// protoc --proto_path=. --proto_path=..\..\common\pb\page\v1  --go-grpc_out=require_unimplemented_servers=false:.\api\v1   --go-grpc_opt  paths=source_relative .\resource.proto
+//protoc-go-inject-tag -input ./api/v1/*.pb.go
 import "page.proto";
 
 service Service {
@@ -149,10 +151,10 @@ message SharedPolicy {
 
 message Base {
   // 全局唯一Id, 直接使用个云商自己的Id, 云商内部唯一
-  // @gotags: json:"id" validate:"required";gorm:"primaryKey;comment:全局唯一Id;not null"
+  // @gotags: json:"id";validate:"required";gorm:"primaryKey;comment:全局唯一Id;not null"
   string id = 1;
   // 同步时间, 什么时候被录入该系统
-  // @gotags: json:"sync_at";gorm:"comment:同步时间"
+  // @gotags: json:"sync_at" @gotags: gorm:"comment:同步时间"
   int64 sync_at = 2;
   // 用于同步的凭证ID, 需要凭证才能读取或操作云商的资源
   // @gotags: json:"secret_id" gorm:"comment:用于同步的凭证ID"
