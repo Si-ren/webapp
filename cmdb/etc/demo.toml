@@ -2,6 +2,7 @@
 name = "demo"
 host = "0.0.0.0"
 port = "8050"
+grpcport = "8051"
 key  = "this is your app key"
 
 [mysql]
@@ -16,3 +17,5 @@ level = "DEBUG"
 path_dir = "logs"
 format = "text"
 to = "stdout"
+
+

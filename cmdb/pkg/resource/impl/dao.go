@@ -1,8 +1,13 @@
 package impl
 
+import (
+	resource "cmdb/pkg/resource/api/v1"
+	"context"
+)
+
 const (
 	sqlInsertResource = `INSERT INTO resource (
-		id,res                                                                                                                              ource_type,vendor,region,zone,create_at,expire_at,category,type,
+		id,resource_type,vendor,region,zone,create_at,expire_at,category,type,
 		name,description,status,update_at,sync_at,sync_accout,public_ip,
 		private_ip,pay_type,describe_hash,resource_hash,secret_id,domain,
 		namespace,env,usage_mode
@@ -46,3 +51,26 @@ const (
 			( type != 1,?, weight );
 	`
 )
+
+func (s *service) create(ctx context.Context, r resource.Resource) error {
+	tx := s.db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+	if err := tx.Create(r.Base).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+	if err := tx.Create(r.Information).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+	if tx.Error != nil {
+		tx.Rollback()
+		return tx.Error
+	}
+
+	return tx.Commit().Error
+}

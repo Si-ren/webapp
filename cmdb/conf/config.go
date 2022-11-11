@@ -25,20 +25,25 @@ type Config struct {
 }
 
 type app struct {
-	Name string `toml:"name" env:"APP_NAME"`
-	Host string `toml:"host" env:"APP_HOST"`
-	Port string `toml:"port" env:"APP_PORT"`
+	Name     string `toml:"name" env:"APP_NAME"`
+	Host     string `toml:"host" env:"APP_HOST"`
+	Port     string `toml:"port" env:"APP_PORT"`
+	GRPCPort string `toml:"grpcport" env:"GRPC_PORT"`
 }
 
 func (a *app) Addr() string {
 	return fmt.Sprintf("%s:%s", a.Host, a.Port)
 }
+func (a *app) GRPCAddr() string {
+	return fmt.Sprintf("%s:%s", a.Host, a.GRPCPort)
+}
 
 func newDefaultAPP() *app {
 	return &app{
-		Name: "demo",
-		Host: "127.0.0.1",
-		Port: "8050",
+		Name:     "demo",
+		Host:     "127.0.0.1",
+		Port:     "8050",
+		GRPCPort: "8051",
 	}
 }
 

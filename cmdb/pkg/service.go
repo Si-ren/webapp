@@ -23,6 +23,7 @@ type ImplService interface {
 	Name() string
 }
 
+// 服务实现
 func ImplRegister(svc ImplService) {
 	if _, ok := implSvcs[svc.Name()]; ok {
 		panic(fmt.Sprintf("ImplService %s has registered", svc.Name()))
@@ -62,7 +63,7 @@ func GetGinSvcs() (names []string) {
 	return names
 }
 
-func InitRouterSvc(r gin.IRouter) {
+func InitGinSvc(r gin.IRouter) {
 	for k, v := range ginSvcs {
 		if err := v.Configure(); err != nil {
 			conf.Log.Panicf("%s router handler Configure  err : %s", k, err)
@@ -86,7 +87,7 @@ func GrpcRegister(svc GrpcService) {
 	grpcSvcs[svc.Name()] = svc
 }
 
-func InitGrpcService(server *grpc.Server) error {
+func InitGRPCSvc(server *grpc.Server) error {
 	for name, svc := range grpcSvcs {
 		if err := svc.Config(); err != nil {
 			return fmt.Errorf("init grpc service %s err: %s", name, err.Error())

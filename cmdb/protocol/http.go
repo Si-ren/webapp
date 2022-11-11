@@ -5,12 +5,23 @@ import (
 	"cmdb/pkg"
 	"context"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
 
+	"github.com/gin-gonic/gin"
+
 	"github.com/sirupsen/logrus"
 )
+
+// HTTPService http服务
+type HTTPService struct {
+	//r      *httprouter.Router
+	r gin.IRouter
+	l *logrus.Logger
+
+	c      *conf.Config
+	server *http.Server
+}
 
 // NewHTTPService 构建函数
 func NewHTTPService() *HTTPService {
@@ -33,22 +44,12 @@ func NewHTTPService() *HTTPService {
 	}
 }
 
-// HTTPService http服务
-type HTTPService struct {
-	//r      *httprouter.Router
-	r gin.IRouter
-	l *logrus.Logger
-
-	c      *conf.Config
-	server *http.Server
-}
-
 // Start 启动服务
 func (s *HTTPService) Start() error {
 	//初始化service实现
 	pkg.InitConfigSvc()
 	// 初始化service路由
-	pkg.InitRouterSvc(s.r)
+	pkg.InitGinSvc(s.r)
 
 	// 启动 HTTP服务
 	s.l.Infof("HTTP服务启动成功, 监听地址: %s", s.server.Addr)

@@ -16,6 +16,7 @@ import (
 
 	_ "cmdb/pkg/host/http"
 	_ "cmdb/pkg/host/impl"
+
 	"github.com/spf13/cobra"
 )
 
@@ -73,10 +74,12 @@ var serviceCmd = &cobra.Command{
 }
 
 func newService() (*service, error) {
-	http := protocol.NewHTTPService()
+	httpSvc := protocol.NewHTTPService()
+	grpcSvc := protocol.NewGRPCService()
 	svr := &service{
-		http: http,
-		log:  conf.Log,
+		httpSvc: httpSvc,
+		grpcSvc: grpcSvc,
+		log:     conf.Log,
 	}
 
 	return svr, nil
@@ -94,12 +97,19 @@ var (
 )
 
 type service struct {
-	http *protocol.HTTPService
-	log  *logrus.Logger
+	httpSvc *protocol.HTTPService
+	grpcSvc *protocol.GRPCService
+	log     *logrus.Logger
 }
 
 func (s *service) start() error {
-	return s.http.Start()
+	go s.httpSvc.Start()
+
+	err := s.grpcSvc.Start()
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (s *service) waitSign(sign chan os.Signal) {
@@ -108,9 +118,12 @@ func (s *service) waitSign(sign chan os.Signal) {
 		default:
 			// 资源清理
 			s.log.Infof("receive signal '%v', start graceful shutdown", v.String())
-			if err := s.http.Stop(); err != nil {
+			//先关闭后台
+			if err := s.httpSvc.Stop(); err != nil {
 				s.log.Errorf("graceful shutdown err: %s, force exit", err)
 			}
+			// 再关闭前台
+			s.grpcSvc.Stop()
 			s.log.Infof("service stop complete")
 			return
 		}
