@@ -18,6 +18,7 @@ type GRPCService struct {
 
 // NewHTTPService 构建函数
 func NewGRPCService() *GRPCService {
+	//初始化grpc server
 	server := grpc.NewServer()
 	return &GRPCService{
 		g: server,
@@ -26,9 +27,12 @@ func NewGRPCService() *GRPCService {
 	}
 }
 
+// Start grpc服务启动
 func (s *GRPCService) Start() error {
 	s.l.Info("Start grpc service")
+
 	pkg.InitConfigSvc()
+	//初始化所有grpc服务
 	if err := pkg.InitGRPCSvc(s.g); err != nil {
 		return err
 	}
@@ -36,7 +40,8 @@ func (s *GRPCService) Start() error {
 	if err != nil {
 		return err
 	}
-	s.l.Infof("listen grpc tcp connect err: %s", s.c.App.GRPCAddr())
+	s.l.Infof("listen grpc tcp connect addr: %s", s.c.App.GRPCAddr())
+	//启动服务
 	if err := s.g.Serve(lis); err != nil {
 		if err == grpc.ErrServerStopped {
 			s.l.Info("service is stopped")
@@ -49,6 +54,7 @@ func (s *GRPCService) Start() error {
 
 }
 
+// Stop grpc优雅关闭
 func (s *GRPCService) Stop() {
 	s.g.GracefulStop()
 }

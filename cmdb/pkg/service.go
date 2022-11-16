@@ -23,7 +23,7 @@ type ImplService interface {
 	Name() string
 }
 
-// 服务实现
+// ImplRegister 服务绑定
 func ImplRegister(svc ImplService) {
 	if _, ok := implSvcs[svc.Name()]; ok {
 		panic(fmt.Sprintf("ImplService %s has registered", svc.Name()))
@@ -73,12 +73,14 @@ func InitGinSvc(r gin.IRouter) {
 	}
 }
 
+// GrpcService 定义grpc service
 type GrpcService interface {
 	Registry(g *grpc.Server)
 	Config() error
 	Name() string
 }
 
+// GrpcRegister 在grpc服务init时 注册到ioc中
 func GrpcRegister(svc GrpcService) {
 	_, ok := grpcSvcs[svc.Name()]
 	if !ok {
@@ -87,6 +89,7 @@ func GrpcRegister(svc GrpcService) {
 	grpcSvcs[svc.Name()] = svc
 }
 
+// InitGRPCSvc 初始化所有grpc服务
 func InitGRPCSvc(server *grpc.Server) error {
 	for name, svc := range grpcSvcs {
 		if err := svc.Config(); err != nil {
@@ -97,6 +100,7 @@ func InitGRPCSvc(server *grpc.Server) error {
 	return nil
 }
 
+// GetGrpcSvcs 获取所有注册的grpc服务
 func GetGrpcSvcs() (names []string) {
 	for k := range grpcSvcs {
 		names = append(names, k)

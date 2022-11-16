@@ -1,5 +1,11 @@
 package connectivity
 
+import (
+	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
+	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
+	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
+)
+
 // NewTencentCloudClient client
 func NewTencentCloudClient(secretID, secretKey, region string) *TencentCloudClient {
 	return &TencentCloudClient{

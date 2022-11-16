@@ -13,7 +13,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-
+	//*** 这里使用package的init函数初始化了注册到了ioc
 	_ "cmdb/pkg/host/http"
 	_ "cmdb/pkg/host/impl"
 
@@ -103,6 +103,7 @@ type service struct {
 }
 
 func (s *service) start() error {
+	//启动两个进程，
 	go s.httpSvc.Start()
 
 	err := s.grpcSvc.Start()

@@ -1,5 +1,7 @@
 package connectivity
 
+import "github.com/aliyun/alibaba-cloud-sdk-go/services/ecs"
+
 // NewAliCloudClient client
 func NewAliCloudClient(ak, sk, region string) *AliCloudClient {
 	return &AliCloudClient{

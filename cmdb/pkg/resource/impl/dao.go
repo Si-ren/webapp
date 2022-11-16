@@ -74,3 +74,26 @@ func (s *service) create(ctx context.Context, r resource.Resource) error {
 
 	return tx.Commit().Error
 }
+func (s *service) updateTag(ctx context.Context, r *resource.UpdateTagRequest) error {
+	tx := s.db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+	for _, v := range r.Tags {
+		tx.Model(&resource.Tag{}).Updates(resource.Tag{
+			ResourceId: v.ResourceId,
+			Type:       v.Type,
+			Key:        v.Key,
+			Value:      v.Value,
+			Describe:   v.Describe,
+			Weight:     v.Weight,
+			IsCost:     v.IsCost,
+			Hidden:     v.Hidden,
+			Meta:       v.Meta,
+		})
+	}
+	tx.Commit()
+	return nil
+}
