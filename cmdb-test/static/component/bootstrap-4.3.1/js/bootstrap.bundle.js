@@ -1606,7 +1606,7 @@
   }
 
   /**
-   * Returns the parentNode or the host of the element
+   * Returns the parentNode or the user of the element
    * @method
    * @memberof Popper.Utils
    * @argument {Element} element

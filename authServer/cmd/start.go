@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"cmdb/conf"
-	"cmdb/pkg/host"
 	"cmdb/protocol"
+	"cmdb/services/user"
 	"errors"
 	"fmt"
 	"strings"
@@ -14,8 +14,8 @@ import (
 	"os/signal"
 	"syscall"
 	//*** 这里使用package的init函数初始化了注册到了ioc
-	_ "cmdb/pkg/host/http"
-	_ "cmdb/pkg/host/impl"
+	_ "cmdb/services/user/http"
+	_ "cmdb/services/user/impl"
 
 	"github.com/spf13/cobra"
 )
@@ -37,9 +37,9 @@ var serviceCmd = &cobra.Command{
 			logrus.Panic("Database init error : ", err)
 		}
 
-		db.AutoMigrate(&host.Base{})
-		db.AutoMigrate(&host.Resource{})
-		db.AutoMigrate(&host.Describe{})
+		db.AutoMigrate(&user.Base{})
+		db.AutoMigrate(&user.Resource{})
+		db.AutoMigrate(&user.Describe{})
 		// 初始化全局日志配置
 		if err := loadGlobalLogger(); err != nil {
 			return err

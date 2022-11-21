@@ -1,11 +1,11 @@
 package impl
 
 import (
-	"cmdb/pkg/host"
+	"cmdb/services/user"
 	"context"
 )
 
-func (s *service) create(ctx context.Context, h *host.Host) error {
+func (s *service) create(ctx context.Context, h *user.User) error {
 	//var (
 	//	stmt *sql.Stmt
 	//	err  error
@@ -52,7 +52,7 @@ func (s *service) create(ctx context.Context, h *host.Host) error {
 	//}
 	//
 	//// 避免SQL注入, 请使用Prepare
-	//stmt, err = tx.Prepare(insertHostSQL)
+	//stmt, err = tx.Prepare(insertUserSQL)
 	//if err != nil {
 	//	return err
 	//}
@@ -69,31 +69,9 @@ func (s *service) create(ctx context.Context, h *host.Host) error {
 	//
 	//return tx.Commit()
 
-	tx := s.db.Begin()
-	defer func() {
-		if r := recover(); r != nil {
-			tx.Rollback()
-		}
-	}()
-	if err := tx.Create(h.Resource).Error; err != nil {
-		tx.Rollback()
-		return err
-	}
-	if err := tx.Create(h.Base).Error; err != nil {
-		tx.Rollback()
-		return err
-	}
-	if err := tx.Create(h.Describe).Error; err != nil {
-		tx.Rollback()
-		return err
-	}
-	if tx.Error != nil {
-		tx.Rollback()
-	}
-	return tx.Commit().Error
 }
 
-func (s *service) delete(ctx context.Context, req *host.DeleteHostRequest) error {
+func (s *service) delete(ctx context.Context, req *user.DeleteUserRequest) error {
 	//var (
 	//	stmt *sql.Stmt
 	//	err  error
@@ -117,7 +95,7 @@ func (s *service) delete(ctx context.Context, req *host.DeleteHostRequest) error
 	//	}
 	//}()
 	//
-	//stmt, err = tx.Prepare(deleteHostSQL)
+	//stmt, err = tx.Prepare(deleteUserSQL)
 	//if err != nil {
 	//	return err
 	//}
@@ -140,24 +118,10 @@ func (s *service) delete(ctx context.Context, req *host.DeleteHostRequest) error
 	//}
 	//
 	//return tx.Commit()
-	tx := s.db.Begin()
-	defer func() {
-		if r := recover(); r != nil {
-			tx.Rollback()
-		}
-	}()
-	if err := tx.Where("id = ?", req.Id).Delete(&host.Resource{}).Error; err != nil {
-		tx.Rollback()
-		return err
-	}
-	if err := tx.Commit().Error; err != nil {
-		tx.Rollback()
-		return err
-	}
-	return nil
+
 }
 
-func (s *service) query(ctx context.Context, req *host.QueryHostRequest) (*host.HostSet, error) {
+func (s *service) query(ctx context.Context, req *user.QueryUserRequest) (*user.UserSet, error) {
 	//var (
 	//	stmt *sql.Stmt
 	//	err  error
@@ -180,7 +144,7 @@ func (s *service) query(ctx context.Context, req *host.QueryHostRequest) (*host.
 	//	}
 	//}()
 	//
-	//stmt, err = tx.Prepare(queryHostSQL)
+	//stmt, err = tx.Prepare(queryUserSQL)
 	//if err != nil {
 	//	return err
 	//}
@@ -200,74 +164,4 @@ func (s *service) query(ctx context.Context, req *host.QueryHostRequest) (*host.
 	// 	return nil, err
 	// }
 
-	hSet := host.NewHostSet()
-	hSet.Items = make([]*host.Host, 0)
-	sliceNum := 0
-	rowsBase, err := s.db.Raw(queryBaseSQL, req.PageNumber*req.PageSize, req.PageSize).Rows()
-	defer rowsBase.Close()
-	if err != nil {
-		return nil, err
-	}
-	for rowsBase.Next() {
-		hb := host.NewHost()
-		rowsBase.Scan(
-			&hb.BaseId,
-			&hb.InstanceId,
-			&hb.SyncAt,
-			&hb.Vendor,
-			&hb.Region,
-			&hb.Zone,
-			&hb.CreateAt,
-			&hb.ResourceHash,
-			&hb.DescribeHash)
-
-		hSet.Add(hb)
-		sliceNum++
-	}
-	sliceNum = 0
-	rowsDescribe, err := s.db.Raw(queryDescribeSQL, req.PageNumber*req.PageSize, req.PageSize).Rows()
-	defer rowsDescribe.Close()
-	if err != nil {
-		return nil, err
-	}
-	for rowsDescribe.Next() {
-		rowsBase.Scan(hSet.Items[sliceNum].Describe.DescribeId,
-			&hSet.Items[sliceNum].Describe.CPU,
-			&hSet.Items[sliceNum].Describe.Memory,
-			&hSet.Items[sliceNum].Describe.GPUAmount,
-			&hSet.Items[sliceNum].Describe.GPUSpec,
-			&hSet.Items[sliceNum].Describe.OSType,
-			&hSet.Items[sliceNum].Describe.OSName,
-			&hSet.Items[sliceNum].Describe.SerialNumber,
-			&hSet.Items[sliceNum].Describe.ImageID,
-			&hSet.Items[sliceNum].Describe.InternetMaxBandwidthIn,
-			&hSet.Items[sliceNum].InternetMaxBandwidthOut,
-			&hSet.Items[sliceNum].KeyPairName,
-			&hSet.Items[sliceNum].SecurityGroups)
-		sliceNum++
-	}
-	sliceNum = 0
-	rowsResource, err := s.db.Raw(queryResourceSQL, req.PageNumber*req.PageSize, req.PageSize).Rows()
-	defer rowsResource.Close()
-	if err != nil {
-		return nil, err
-	}
-	for rowsResource.Next() {
-		rowsBase.Scan(hSet.Items[sliceNum].Resource.ResourceId,
-			&hSet.Items[sliceNum].Resource.ExpireAt,
-			&hSet.Items[sliceNum].Resource.Category,
-			&hSet.Items[sliceNum].Resource.Type,
-			&hSet.Items[sliceNum].Resource.Name,
-			&hSet.Items[sliceNum].Resource.Description,
-			&hSet.Items[sliceNum].Resource.Status,
-			&hSet.Items[sliceNum].Resource.Tags,
-			&hSet.Items[sliceNum].Resource.UpdateAt,
-			&hSet.Items[sliceNum].Resource.SyncAccount,
-			&hSet.Items[sliceNum].Resource.PublicIP,
-			&hSet.Items[sliceNum].Resource.PrivateIP,
-			&hSet.Items[sliceNum].Resource.PayType)
-		sliceNum++
-	}
-	hSet.Total = sliceNum
-	return hSet, nil
 }

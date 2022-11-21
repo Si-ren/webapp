@@ -16,7 +16,7 @@ const (
 		name,description,status,update_at,sync_at,sync_accout,public_ip,
 		private_ip,pay_type,describe_hash,resource_hash
 	) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);`
-	insertHostSQL = `INSERT INTO host (
+	insertHostSQL = `INSERT INTO user (
 		resource_id,cpu,memory,gpu_amount,gpu_spec,os_type,os_name,
 		serial_number,image_id,internet_max_bandwidth_out,
 		internet_max_bandwidth_in,key_pair_name,security_groups
@@ -26,17 +26,17 @@ const (
 		status=?,update_at=?,sync_at=?,sync_accout=?,
 		public_ip=?,private_ip=?,pay_type=?,describe_hash=?,resource_hash=?
 	WHERE id = ?`
-	updateHostSQL = `UPDATE host SET 
+	updateHostSQL = `UPDATE user SET 
 		cpu=?,memory=?,gpu_amount=?,gpu_spec=?,os_type=?,os_name=?,
 		image_id=?,internet_max_bandwidth_out=?,
 		internet_max_bandwidth_in=?,key_pair_name=?,security_groups=?
 	WHERE resource_id = ?`
 
-	queryHostSQL      = `SELECT * FROM resource as r LEFT JOIN host h ON r.id=h.resource_id`
+	queryHostSQL      = `SELECT * FROM resource as r LEFT JOIN user h ON r.id=h.resource_id`
 	queryResourceSQL  = `SELECT * FROM resource where resource_id >= ? limit ?;`
 	queryDescribeSQL  = "SELECT * FROM `describe` where  describe_id >= ? limit ?;"
 	queryBaseSQL      = `SELECT base_id,instance_id,sync_at,vendor,region,zone,create_at,resource_hash,describe_hash FROM base where base_id >= ? limit ?;`
-	deleteHostSQL     = `DELETE FROM host WHERE resource_id = ?;`
+	deleteHostSQL     = `DELETE FROM user WHERE resource_id = ?;`
 	deleteResourceSQL = `DELETE FROM resource WHERE id = ?;`
 )
 

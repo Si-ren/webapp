@@ -2,9 +2,9 @@ package http
 
 import (
 	"cmdb/conf"
-	"cmdb/pkg"
-	"cmdb/pkg/host"
-	"cmdb/pkg/host/impl"
+	"cmdb/services"
+	"cmdb/services/user"
+	"cmdb/services/user/impl"
 	"fmt"
 
 	"github.com/gin-gonic/gin"
@@ -12,20 +12,20 @@ import (
 )
 
 var (
-	api                = &handler{}
-	_   pkg.GinService = (*handler)(nil)
+	api                     = &handler{}
+	_   services.GinService = (*handler)(nil)
 )
 
 type handler struct {
-	svc host.Service
+	svc user.Service
 	log *logrus.Logger
 }
 
 func (h *handler) Name() string {
-	return host.AppName
+	return user.AppName
 }
 
-func NewHostHandler(svc host.Service) *handler {
+func NewHostHandler(svc user.Service) *handler {
 	return &handler{
 		svc: svc,
 		log: conf.Log,
@@ -34,10 +34,10 @@ func NewHostHandler(svc host.Service) *handler {
 
 func (h *handler) Configure() error {
 	h.log = conf.Log
-	if pkg.Host == nil {
+	if services.Host == nil {
 		return fmt.Errorf("dependence service user not ready")
 	}
-	h.svc = pkg.Host
+	h.svc = services.Host
 	return nil
 }
 
@@ -49,7 +49,7 @@ func (h *handler) Registry(r gin.IRouter) {
 
 func init() {
 	api = NewHostHandler(impl.HostService)
-	pkg.GinRegister(api)
+	services.GinRegister(api)
 }
 
 // func RegistAPI(r *httprouter.Router) {
